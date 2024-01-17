@@ -90,14 +90,14 @@ export const FindLocationsScreen = () => {
             showsVerticalScrollIndicator={false}
             data={suggestions}
             keyExtractor={(item, index) => item.place_id + index}
-            renderItem={({ item, index }) => {
+            renderItem={({ item, index }) => (
               <TouchableOpacity
                 onPress={() => {
                   console.log(item);
                 }}>
                 <SuggestedText locationItem={item} />
-              </TouchableOpacity>;
-            }}
+              </TouchableOpacity>
+            )}
           />
         ) : null}
       </View>
