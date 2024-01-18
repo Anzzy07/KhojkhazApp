@@ -9,11 +9,13 @@ import { Row } from 'components/Row';
 import { useNavigation } from '@react-navigation/native';
 import { getSuggestedLocations, searchLocations } from 'services/location';
 import { Location } from 'types/locationIQ';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList } from 'navigation';
 
 export const FindLocationsScreen = () => {
   const [value, setValue] = useState('');
   const [suggestions, setSuggestions] = useState<Location[]>([]);
-  const navigation = useNavigation();
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
   const handleChange = async (val: string) => {
     setValue(val);
@@ -27,6 +29,18 @@ export const FindLocationsScreen = () => {
     if (locations.length > 0) {
       console.log('navigate to search screen', locations[0]);
     }
+  };
+
+  const handleNavigate = (location: Location) => {
+    navigation.navigate('TabNavigator', {
+      screen: 'Search',
+      params: {
+        location: getFormattedLocationText(location), // Only one argument
+        lat: location.lat,
+        lon: location.lon,
+        boundingBox: location.boundingbox,
+      },
+    });
   };
 
   const getInput = () => {
@@ -65,9 +79,11 @@ export const FindLocationsScreen = () => {
     );
   };
 
-  const getFormattedLocationText = (item: Location) => {
-    let location = item.address.name;
-    if (item.type === 'city' && item.address.state) location += ' , ' + item.address.state;
+  const getFormattedLocationText = (item: Location): string => {
+    let location = item.address.name || 'Unknown Location'; // Default value if undefined
+    if (item.type === 'city' && item.address.state) {
+      location += ', ' + item.address.state;
+    }
     return location;
   };
 
