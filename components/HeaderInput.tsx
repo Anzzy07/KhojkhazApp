@@ -4,16 +4,16 @@ import { Text } from '@ui-kitten/components';
 import { Row } from '../components/Row';
 import { theme } from '../theme';
 import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList } from 'navigation';
 
-export const HeaderInput = () => {
-  const navigation = useNavigation();
+export const HeaderInput = ({ location }: { location: string }) => {
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   return (
-    <TouchableOpacity
-      style={styles.container}
-      onPress={() => (navigation.navigate as any)('FindLocations')}>
+    <TouchableOpacity style={styles.container} onPress={() => navigation.navigate('FindLocations')}>
       <Row style={{ alignItems: 'center' }}>
         <MaterialCommunityIcons name="magnify" color={theme['color-primary-500']} size={28} />
-        <Text style={styles.text}>Find a Location</Text>
+        <Text style={styles.text}>{location}</Text>
       </Row>
     </TouchableOpacity>
   );

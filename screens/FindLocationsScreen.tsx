@@ -1,6 +1,6 @@
 import React from 'react';
 import { useState } from 'react';
-import { Platform, StyleSheet, View, FlatList, TouchableOpacity } from 'react-native';
+import { Platform, StyleSheet, View, FlatList, TouchableOpacity, ScrollView } from 'react-native';
 import { Input, Text, Button } from '@ui-kitten/components';
 import { ModalHeader } from 'components/ModalHeader';
 import { Screen } from 'components/Screen';
@@ -11,6 +11,7 @@ import { getSuggestedLocations, searchLocations } from 'services/location';
 import { Location } from 'types/locationIQ';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from 'navigation';
+import { CurrentLocationButton } from 'components/CurrentLocationButton';
 
 export const FindLocationsScreen = () => {
   const [value, setValue] = useState('');
@@ -24,10 +25,11 @@ export const FindLocationsScreen = () => {
       if (locations.length > 0) setSuggestions(locations);
     } else if (val.length === 0) setSuggestions([]);
   };
+
   const handleSubmitEditing = async () => {
     const locations = await getSuggestedLocations(value);
     if (locations.length > 0) {
-      console.log('navigate to search screen', locations[0]);
+      handleNavigate(locations[0]);
     }
   };
 
@@ -109,13 +111,17 @@ export const FindLocationsScreen = () => {
             renderItem={({ item, index }) => (
               <TouchableOpacity
                 onPress={() => {
-                  console.log(item);
+                  handleNavigate(item);
                 }}>
                 <SuggestedText locationItem={item} />
               </TouchableOpacity>
             )}
           />
-        ) : null}
+        ) : (
+          <ScrollView bounces={false}>
+            <CurrentLocationButton style={styles.currentLocationButton} />
+          </ScrollView>
+        )}
       </View>
     </Screen>
   );
@@ -133,5 +139,8 @@ const styles = StyleSheet.create({
     padding: 15,
     borderBottomWidth: 1,
     borderBottomColor: theme['color-gray'],
+  },
+  currentLocationButton: {
+    marginTop: 40,
   },
 });
