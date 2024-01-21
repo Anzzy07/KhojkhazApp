@@ -2,6 +2,8 @@ import React from 'react';
 import { useState } from 'react';
 import { Platform, StyleSheet, View, FlatList, TouchableOpacity, ScrollView } from 'react-native';
 import { Input, Text, Button } from '@ui-kitten/components';
+import { useQueryClient } from 'react-query';
+
 import { ModalHeader } from 'components/ModalHeader';
 import { Screen } from 'components/Screen';
 import { theme } from 'theme';
@@ -12,11 +14,36 @@ import { Location } from 'types/locationIQ';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from 'navigation';
 import { CurrentLocationButton } from 'components/CurrentLocationButton';
+import { getFormattedLocationText } from 'utils/getFormattedLocationText';
+import { RecentSearchList } from 'components/RecentSearchList';
 
 export const FindLocationsScreen = () => {
   const [value, setValue] = useState('');
   const [suggestions, setSuggestions] = useState<Location[]>([]);
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+  const queryClient = useQueryClient();
+  const recentSearches: Location[] | undefined = queryClient.getQueryData('recentSearches');
+
+  const setRecentSearch = (location: Location) => {
+    queryClient.setQueryData('recentSearches', () => {
+      if (recentSearches) {
+        let included = false;
+        for (let i of recentSearches) {
+          if (
+            i.display_name === location.display_name &&
+            i.lon === location.lon &&
+            i.lat === location.lat
+          ) {
+            included = true;
+            break;
+          }
+        }
+        if (!included) return [location, ...recentSearches];
+        return recentSearches;
+      }
+      return [location];
+    });
+  };
 
   const handleChange = async (val: string) => {
     setValue(val);
@@ -34,6 +61,7 @@ export const FindLocationsScreen = () => {
   };
 
   const handleNavigate = (location: Location) => {
+    setRecentSearch(location);
     navigation.navigate('TabNavigator', {
       screen: 'Search',
       params: {
@@ -81,14 +109,6 @@ export const FindLocationsScreen = () => {
     );
   };
 
-  const getFormattedLocationText = (item: Location): string => {
-    let location = item.address.name || 'Unknown Location'; // Default value if undefined
-    if (item.type === 'city' && item.address.state) {
-      location += ', ' + item.address.state;
-    }
-    return location;
-  };
-
   const SuggestedText = ({ locationItem }: { locationItem: Location }) => {
     const location = getFormattedLocationText(locationItem);
     return (
@@ -120,6 +140,10 @@ export const FindLocationsScreen = () => {
         ) : (
           <ScrollView bounces={false}>
             <CurrentLocationButton style={styles.currentLocationButton} />
+            <RecentSearchList
+              style={styles.recentSearchContainer}
+              recentSearches={recentSearches}
+            />
           </ScrollView>
         )}
       </View>
@@ -143,4 +167,5 @@ const styles = StyleSheet.create({
   currentLocationButton: {
     marginTop: 40,
   },
+  recentSearchContainer: { marginTop: 30 },
 });
