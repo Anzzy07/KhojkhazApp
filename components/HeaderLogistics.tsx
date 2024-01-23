@@ -34,9 +34,11 @@ const HeaderLogisticsButton = ({
 export const HeaderLogistics = ({
   mapShown,
   setMapShown,
+  availableProperties,
 }: {
   mapShown: boolean;
   setMapShown: (bool: boolean) => void;
+  availableProperties?: number;
 }) => {
   const navigation = useNavigation();
 
@@ -51,7 +53,7 @@ export const HeaderLogistics = ({
       <Row style={styles.row}>
         <MaterialCommunityIcons name="map-marker" size={18} color={theme['color-primary-500']} />
         <Text category={'c1'} appearance={'hint'}>
-          15 Available
+          {availableProperties ? `${availableProperties} Spaces Available` : `Search Spaces`}
         </Text>
         <HeaderLogisticsButton
           label="Save"
