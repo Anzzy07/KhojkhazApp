@@ -1,11 +1,186 @@
 import React from 'react';
-import { Text } from 'react-native';
+import { ScrollView, View, StyleSheet } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { Text, Button } from '@ui-kitten/components';
 import { Screen } from 'components/Screen';
 
+import { SignUpAndSignInButtons } from 'components/SignUpAndSignInButton';
+import { theme } from 'theme';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList } from 'navigation';
+import { ButtonList } from 'components/ButtonList';
+
 export const AccountScreen = () => {
+  const user = undefined;
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+
+  const firstSignedOutButtons = [
+    {
+      label: 'Add a Property',
+      onPress: () => console.log('AddProperty'),
+    },
+    {
+      label: 'View My Properties',
+      onPress: () => console.log('MyProperties'),
+    },
+  ];
+
+  const supportButtons = [
+    {
+      label: 'Help Center',
+      onPress: () => console.log('navigate to Help Center'),
+    },
+    {
+      label: 'Terms and Conditions',
+      onPress: () => console.log('navigate to Terms and Conditions'),
+    },
+  ];
+
+  const rentingButtons = [
+    {
+      label: 'Favorite Properties',
+      onPress: () => navigation.navigate('TabNavigator', { screen: 'Saved' }),
+    },
+    {
+      label: 'Rental Applications',
+      onPress: () => console.log('navigate to Rental Applications'),
+    },
+    {
+      label: 'My Residences',
+      onPress: () => console.log('MyProperties'),
+    },
+    {
+      label: 'Rent Payments',
+      onPress: () => console.log('navigate to Rent Payments'),
+    },
+  ];
+
+  const accountButtons = [
+    {
+      label: 'Account Settings',
+      onPress: () => console.log('navigate to Account Setting'),
+    },
+    {
+      label: 'Billing History',
+      onPress: () => console.log('navigate to Billing History'),
+    },
+    {
+      label: 'Banks and Cards',
+      onPress: () => console.log('navigate to Banks and Cards'),
+    },
+  ];
+
+  const rentalManagementButtons = [
+    {
+      label: 'Add a Property',
+      onPress: () => console.log('AddProperty'),
+    },
+    {
+      label: 'Add Apartment to Property',
+      onPress: () => console.log('navigate to MyProperties'),
+    },
+    {
+      label: 'View My Properties',
+      onPress: () => console.log('MyProperties'),
+    },
+  ];
+
   return (
     <Screen>
-      <Text>Account</Text>
+      <ScrollView style={styles.container}>
+        <View style={styles.defaultMarginHorizontal}>
+          {user ? (
+            <>
+              <Text style={styles.userName} category={'h4'}>
+                Welcome Username
+              </Text>
+              <Text style={styles.email} category={'h6'}>
+                Email
+              </Text>
+            </>
+          ) : (
+            <>
+              <Text style={styles.header} category={'h5'}>
+                Finding properties has never been easier!
+              </Text>
+
+              <SignUpAndSignInButtons />
+              <View style={styles.middleContainer}>
+                <Text category={'s1'} style={styles.subheader}>
+                  Are you a property owner or manager?
+                </Text>
+                <Text style={styles.bodyText}>
+                  Visit our website to access our full suite of property management tools and start
+                  receiving applications in minutes!
+                </Text>
+              </View>
+            </>
+          )}
+        </View>
+        {user ? (
+          <>
+            <ButtonList data={rentingButtons} header={'Renting Made Easy'} />
+            <ButtonList data={accountButtons} header={'My Account'} />
+            <ButtonList data={rentalManagementButtons} header={'Rental Manager Tools'} />
+            <ButtonList data={supportButtons} header={'Support'} />
+            <View style={[styles.specialMarginVertical, styles.defaultMarginHorizontal]}>
+              <Button
+                appearance={'ghost'}
+                style={styles.button}
+                onPress={() => console.log('log user out')}>
+                Sign Out
+              </Button>
+            </View>
+          </>
+        ) : (
+          <>
+            <ButtonList data={firstSignedOutButtons} borderTop />
+            <ButtonList data={supportButtons} header="Support" marginTop />
+            <Text appearance={'hint'} style={[styles.brandText, styles.specialMarginVertical]}>
+              Anzel307.com Version 1.0
+            </Text>
+          </>
+        )}
+      </ScrollView>
     </Screen>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  defaultMarginHorizontal: { marginHorizontal: 10 },
+  userName: {
+    textAlign: 'center',
+    fontWeight: '600',
+    marginBottom: 5,
+    textTransform: 'capitalize',
+  },
+  email: {
+    textAlign: 'center',
+    fontWeight: '500',
+    marginBottom: 20,
+  },
+  header: {
+    textAlign: 'center',
+    marginVertical: 25,
+    marginHorizontal: 70,
+    fontWeight: '600',
+  },
+  middleContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingTop: 30,
+    paddingBottom: 50,
+    borderTopColor: theme['color-gray'],
+    borderTopWidth: 2,
+  },
+  subheader: { textAlign: 'center', paddingHorizontal: 20 },
+  bodyText: { marginTop: 10, textAlign: 'center', marginHorizontal: 15 },
+  specialMarginVertical: { marginTop: 30, marginBottom: 20 },
+  button: { marginBottom: 15, borderColor: theme['color-primary-500'] },
+  brandText: {
+    textAlign: 'center',
+  },
+});
