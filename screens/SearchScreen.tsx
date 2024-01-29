@@ -48,13 +48,16 @@ export const SearchScreen = ({ route }: { route: { params: SearchScreenParams } 
         scrollAnimation={scrollAnimation}
         setMapShown={setMapShown}
         mapShown={mapShown}
-        location={route.params ? route.params.location : 'Find a Location'}
+        location={location ? location : 'Find a Location'}
         availableProperties={properties ? properties.length : undefined}
       />
       {mapShown ? (
         <Map
           properties={properties}
           mapRef={mapRef}
+          location={location ? location : 'Find a Location'}
+          setLocation={setLocation}
+          setProperties={setProperties}
           initialRegion={
             route.params
               ? {
