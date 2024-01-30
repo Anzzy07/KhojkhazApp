@@ -2,6 +2,10 @@ import { NavigationContainer, NavigatorScreenParams } from '@react-navigation/na
 import { createStackNavigator } from '@react-navigation/stack';
 import TabNavigator from './tab-navigator';
 import { FindLocationsScreen } from 'screens/FindLocationsScreen';
+import { SignInScreen } from 'screens/SignInScreen';
+import { SignUpScreen } from 'screens/SignUpScreen';
+import { ForgotPasswordScreen } from 'screens/ForgotPasswordScreen';
+import { ResetPasswordScreen } from 'screens/ResetPasswordScreen';
 
 export type TabNavigatorParamList = {
   Search: undefined | SearchScreenParams;
@@ -13,6 +17,10 @@ export type RootStackParamList = {
   TabNavigator: NavigatorScreenParams<TabNavigatorParamList>;
   Modal: undefined;
   FindLocations: undefined;
+  SignIn: undefined;
+  SignUp: undefined;
+  ForgotPassword: undefined;
+  ResetPassword: { token: string };
 };
 
 export type SearchScreenParams = {
@@ -40,12 +48,19 @@ export default function RootStack() {
             component={FindLocationsScreen}
             options={{ headerShown: false }}
           />
+          <Stack.Screen name="SignUp" component={SignUpScreen} options={{ headerShown: false }} />
+          <Stack.Screen name="SignIn" component={SignInScreen} options={{ headerShown: false }} />
+          <Stack.Screen
+            name="ForgotPassword"
+            component={ForgotPasswordScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="ResetPassword"
+            component={ResetPasswordScreen}
+            options={{ headerShown: false }}
+          />
         </Stack.Group>
-        {/* <Stack.Screen
-          name="Modal"
-          component={Modal}
-          options={{ presentation: 'modal', headerLeft: null }}
-        /> */}
       </Stack.Navigator>
     </NavigationContainer>
   );

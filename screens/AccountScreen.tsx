@@ -11,7 +11,7 @@ import { RootStackParamList } from 'navigation';
 import { ButtonList } from 'components/ButtonList';
 
 export const AccountScreen = () => {
-  const user = undefined;
+  const user = false;
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
   const firstSignedOutButtons = [
@@ -142,6 +142,8 @@ export const AccountScreen = () => {
           </>
         )}
       </ScrollView>
+      <Button onPress={() => navigation.navigate('ForgotPassword')}>Forgot</Button>
+      <Button onPress={() => navigation.navigate('ResetPassword', { token: 'wasd' })}>Reset</Button>
     </Screen>
   );
 };
