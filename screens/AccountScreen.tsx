@@ -142,7 +142,6 @@ export const AccountScreen = () => {
           </>
         )}
       </ScrollView>
-      <Button onPress={() => navigation.navigate('ForgotPassword')}>Forgot</Button>
       <Button onPress={() => navigation.navigate('ResetPassword', { token: 'wasd' })}>Reset</Button>
     </Screen>
   );

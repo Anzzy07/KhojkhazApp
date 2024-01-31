@@ -1,14 +1,14 @@
-import * as React from 'react';
-import Svg, { Rect, Path } from 'react-native-svg';
+import Svg, { Path } from 'react-native-svg';
 
-export function FacebookLogo(props: any) {
-  return (
-    <Svg xmlns="http://www.w3.org/2000/svg" aria-label="Facebook" viewBox="0 0 512 512" {...props}>
-      <Rect width={512} height={512} rx="15%" fill="#1877f2" />
-      <Path
-        d="M355.6 330l11.4-74h-71v-48c0-20.2 9.9-40 41.7-40H370v-63s-29.3-5-57.3-5c-58.5 0-96.7 35.4-96.7 99.6V256h-65v74h65v182h80V330h59.6z"
-        fill="#fff"
-      />
-    </Svg>
-  );
-}
+export const FacebookLogo = (props: any) => (
+  <Svg width={48} height={48} fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+    <Path
+      d="M24 0c13.255 0 24 10.746 24 24 0 13.256-10.745 24-24 24C10.744 48 0 37.255 0 24 0 10.746 10.745 0 24 0Z"
+      fill="#3B5998"
+    />
+    <Path
+      d="M26.922 16.522h3.093v-4.569H26.38v.017c-4.405.156-5.308 2.632-5.388 5.233h-.009v2.282h-3v4.474h3v11.994h4.521V23.959h3.704l.715-4.474h-4.417v-1.379c0-.879.585-1.584 1.417-1.584Z"
+      fill="#fff"
+    />
+  </Svg>
+);
