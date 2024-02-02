@@ -14,11 +14,14 @@ androidHeight += androidNotch;
 export const HEADERHEIGHT = Platform.OS === 'ios' ? iosHeight : androidHeight;
 
 const serverUrl = 'http://192.168.2.98:4000/api';
-
 const location = '/location';
+const user = '/user';
 const locationEndpoint = serverUrl + location;
+const userEndpoint = serverUrl + user;
 
 export const endpoints = {
-  autoCompleteEndpoint: locationEndpoint + '/autocomplete',
-  searchEndpoint: locationEndpoint + '/search',
+  autoComplete: locationEndpoint + '/autocomplete',
+  search: locationEndpoint + '/search',
+  register: userEndpoint + '/register',
+  login: userEndpoint + '/login',
 };
