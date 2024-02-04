@@ -10,8 +10,35 @@ import { FacebookButton } from 'components/FacebookButton';
 import { AppleButton } from 'components/AppleButton';
 import { PasswordInput } from 'components/PasswordInput';
 import { OrDivider } from 'components/OrDivider';
+import { registerUser } from 'services/user';
+import { useAuth } from 'hooks/useAuth';
+import { useMutation } from 'react-query';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList } from 'navigation';
+import { Loading } from 'components/loading';
 
 export const SignUpScreen = () => {
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+  const { login } = useAuth();
+
+  const nativeRegister = useMutation(
+    async (values: { firstName: string; lastName: string; email: string; password: string }) => {
+      const user = await registerUser(
+        values.firstName,
+        values.lastName,
+        values.email,
+        values.password
+      );
+      if (user) {
+        login(user);
+        navigation.goBack();
+      }
+    }
+  );
+
+  if (nativeRegister.isLoading) return <Loading />;
+
   return (
     <KeyboardAwareScrollView bounces={false}>
       <Screen style={styles.container}>
@@ -39,7 +66,7 @@ export const SignUpScreen = () => {
               ),
           })}
           onSubmit={(values) => {
-            console.log('Signup ', values);
+            nativeRegister.mutate(values);
           }}>
           {({
             values,

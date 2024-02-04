@@ -16,6 +16,7 @@ import { OrDivider } from 'components/OrDivider';
 import { loginUser } from 'services/user';
 import { useAuth } from 'hooks/useAuth';
 import { useMutation } from 'react-query';
+import { Loading } from 'components/loading';
 
 export const SignInScreen = () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
@@ -29,7 +30,7 @@ export const SignInScreen = () => {
     }
   });
 
-  if (nativeLogin.isLoading) return <Text>Loading...</Text>;
+  if (nativeLogin.isLoading) return <Loading />;
 
   return (
     <KeyboardAwareScrollView bounces={false}>
