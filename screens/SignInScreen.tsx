@@ -13,9 +13,23 @@ import { PasswordInput } from 'components/PasswordInput';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from 'navigation';
 import { OrDivider } from 'components/OrDivider';
+import { loginUser } from 'services/user';
+import { useAuth } from 'hooks/useAuth';
+import { useMutation } from 'react-query';
 
 export const SignInScreen = () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+  const { login } = useAuth();
+
+  const nativeLogin = useMutation(async (values: { email: string; password: string }) => {
+    const user = await loginUser(values.email, values.password);
+    if (user) {
+      login(user);
+      navigation.goBack();
+    }
+  });
+
+  if (nativeLogin.isLoading) return <Text>Loading...</Text>;
 
   return (
     <KeyboardAwareScrollView bounces={false}>
@@ -34,7 +48,7 @@ export const SignInScreen = () => {
             password: yup.string().required('A password is required.'),
           })}
           onSubmit={async (values) => {
-            console.log('login value passing to server', values);
+            nativeLogin.mutate(values);
           }}>
           {({ values, errors, touched, handleChange, handleSubmit, setFieldTouched }) => {
             return (

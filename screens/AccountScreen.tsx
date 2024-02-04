@@ -9,9 +9,10 @@ import { theme } from 'theme';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from 'navigation';
 import { ButtonList } from 'components/ButtonList';
+import { useAuth } from 'hooks/useAuth';
 
 export const AccountScreen = () => {
-  const user = false;
+  const { user, logout } = useAuth();
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
   const firstSignedOutButtons = [
@@ -92,10 +93,10 @@ export const AccountScreen = () => {
           {user ? (
             <>
               <Text style={styles.userName} category={'h4'}>
-                Welcome Username
+                Welcome{user.firstName ? `, ${user.firstName}` : ''}
               </Text>
               <Text style={styles.email} category={'h6'}>
-                Email
+                {user.email}
               </Text>
             </>
           ) : (
@@ -124,10 +125,7 @@ export const AccountScreen = () => {
             <ButtonList data={rentalManagementButtons} header={'Rental Manager Tools'} />
             <ButtonList data={supportButtons} header={'Support'} />
             <View style={[styles.specialMarginVertical, styles.defaultMarginHorizontal]}>
-              <Button
-                appearance={'ghost'}
-                style={styles.button}
-                onPress={() => console.log('log user out')}>
+              <Button appearance={'ghost'} style={styles.button} onPress={logout}>
                 Sign Out
               </Button>
             </View>

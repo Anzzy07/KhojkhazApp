@@ -9,10 +9,11 @@ import { properties } from 'data/properties';
 import { Card } from 'components/Card';
 import { Property } from 'types/property';
 import { SignUpAndSignInButtons } from 'components/SignUpAndSignInButton';
+import { useAuth } from 'hooks/useAuth';
 
 export const SavedScreen = () => {
   const [activeIndex, setActiveIndex] = useState<number>(0);
-  const user = false;
+  const { user } = useAuth();
   const likedProperties = undefined;
   const contactedProperties = undefined;
   const applicationProperties = undefined;
