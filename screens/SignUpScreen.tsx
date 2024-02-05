@@ -3,6 +3,7 @@ import { Text, Input, Button } from '@ui-kitten/components';
 import * as yup from 'yup';
 import { Formik } from 'formik';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import * as Facebook from 'expo-auth-session/providers/facebook';
 import { Screen } from 'components/Screen';
 import { ModalHeader } from 'components/ModalHeader';
 import { GoogleButton } from 'components/GoogleButton';
@@ -22,6 +23,10 @@ export const SignUpScreen = () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const { login } = useAuth();
 
+  const [__, ___, fbPromptAsync] = Facebook.useAuthRequest({
+    clientId: '908906854241707',
+  });
+
   const nativeRegister = useMutation(
     async (values: { firstName: string; lastName: string; email: string; password: string }) => {
       const user = await registerUser(
@@ -36,6 +41,15 @@ export const SignUpScreen = () => {
       }
     }
   );
+
+  const facebookRegister = useMutation(async () => {
+    const response = await fbPromptAsync();
+    if (response.type === 'success') {
+      const { access_token } = response.params;
+
+      console.log(access_token);
+    }
+  });
 
   if (nativeRegister.isLoading) return <Loading />;
 
@@ -141,7 +155,7 @@ export const SignUpScreen = () => {
                 <FacebookButton
                   text="Sign Up with Facebook"
                   style={styles.button}
-                  onPress={() => console.log('Facebook signup')}
+                  onPress={() => facebookRegister.mutate()}
                 />
                 <AppleButton type="sign-in" onPress={() => console.log('Apple signup')} />
               </>
