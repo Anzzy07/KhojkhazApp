@@ -13,14 +13,20 @@ import { PasswordInput } from 'components/PasswordInput';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from 'navigation';
 import { OrDivider } from 'components/OrDivider';
-import { loginUser } from 'services/user';
+import { facebookLoginOrRegister, loginUser } from 'services/user';
 import { useAuth } from 'hooks/useAuth';
 import { useMutation } from 'react-query';
 import { Loading } from 'components/loading';
+import * as Facebook from 'expo-auth-session/providers/facebook';
 
 export const SignInScreen = () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const { login } = useAuth();
+
+  const [__, ___, fbPromptAsync] = Facebook.useAuthRequest({
+    clientId: '229503536901618',
+    redirectUri: 'https://auth.expo.io/@anzel/khojkhaz',
+  });
 
   const nativeLogin = useMutation(async (values: { email: string; password: string }) => {
     const user = await loginUser(values.email, values.password);
@@ -30,7 +36,20 @@ export const SignInScreen = () => {
     }
   });
 
-  if (nativeLogin.isLoading) return <Loading />;
+  const facebookLogin = useMutation(async () => {
+    const response = await fbPromptAsync();
+    if (response.type === 'success') {
+      const { access_token } = response.params;
+
+      const user = await facebookLoginOrRegister(access_token);
+      if (user) {
+        login(user);
+        navigation.goBack();
+      }
+    }
+  });
+
+  if (nativeLogin.isLoading || facebookLogin.isLoading) return <Loading />;
 
   return (
     <KeyboardAwareScrollView bounces={false}>
@@ -99,7 +118,7 @@ export const SignInScreen = () => {
                 <FacebookButton
                   text="Continue with Facebook"
                   style={styles.button}
-                  onPress={() => console.log('Facebook login')}
+                  onPress={() => facebookLogin.mutate()}
                 />
                 <AppleButton type="sign-in" onPress={() => console.log('Apple login')} />
               </>

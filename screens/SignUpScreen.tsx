@@ -11,7 +11,7 @@ import { FacebookButton } from 'components/FacebookButton';
 import { AppleButton } from 'components/AppleButton';
 import { PasswordInput } from 'components/PasswordInput';
 import { OrDivider } from 'components/OrDivider';
-import { registerUser } from 'services/user';
+import { facebookLoginOrRegister, registerUser } from 'services/user';
 import { useAuth } from 'hooks/useAuth';
 import { useMutation } from 'react-query';
 import { useNavigation } from '@react-navigation/native';
@@ -24,7 +24,8 @@ export const SignUpScreen = () => {
   const { login } = useAuth();
 
   const [__, ___, fbPromptAsync] = Facebook.useAuthRequest({
-    clientId: '908906854241707',
+    clientId: '229503536901618',
+    redirectUri: 'https://auth.expo.io/@anzel/khojkhaz',
   });
 
   const nativeRegister = useMutation(
@@ -47,11 +48,15 @@ export const SignUpScreen = () => {
     if (response.type === 'success') {
       const { access_token } = response.params;
 
-      console.log(access_token);
+      const user = await facebookLoginOrRegister(access_token);
+      if (user) {
+        login(user);
+        navigation.goBack();
+      }
     }
   });
 
-  if (nativeRegister.isLoading) return <Loading />;
+  if (nativeRegister.isLoading || facebookRegister.isLoading) return <Loading />;
 
   return (
     <KeyboardAwareScrollView bounces={false}>

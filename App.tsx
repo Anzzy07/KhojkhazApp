@@ -6,7 +6,7 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import { useState, useEffect } from 'react';
 import * as eva from '@eva-design/eva';
 import { ApplicationProvider, Layout, Text } from '@ui-kitten/components';
-import { theme } from 'theme';
+import { theme } from '../khojkhaz/theme';
 import { AuthContext } from 'context';
 import { User } from 'types/user';
 import * as SecureStore from 'expo-secure-store';
