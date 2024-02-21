@@ -2,6 +2,7 @@ import { StyleSheet } from 'react-native';
 import { Text, Input, Button } from '@ui-kitten/components';
 import * as yup from 'yup';
 import { Formik } from 'formik';
+import * as AppleAuthentication from 'expo-apple-authentication';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import * as Facebook from 'expo-auth-session/providers/facebook';
 import { Screen } from 'components/Screen';
@@ -11,19 +12,32 @@ import { FacebookButton } from 'components/FacebookButton';
 import { AppleButton } from 'components/AppleButton';
 import { PasswordInput } from 'components/PasswordInput';
 import { OrDivider } from 'components/OrDivider';
-import { facebookLoginOrRegister, registerUser } from 'services/user';
+import {
+  appleLoginOrRegister,
+  facebookLoginOrRegister,
+  googleLoginOrRegister,
+  registerUser,
+} from 'services/user';
 import { useAuth } from 'hooks/useAuth';
 import { useMutation } from 'react-query';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from 'navigation';
 import { Loading } from 'components/loading';
+import * as Google from 'expo-auth-session/providers/google';
 
 export const SignUpScreen = () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const { login } = useAuth();
 
-  const [__, ___, fbPromptAsync] = Facebook.useAuthRequest({
+  const [_, __, googlePromptAsync] = Google.useAuthRequest({
+    expoClientId: '841113567422-4h0fi2te8ngedfi9unk4m1bbbmrjiun4.apps.googleusercontent.com',
+    iosClientId: '841113567422-ovi5t3grd0a5cereu56fqqp8phk6j2kg.apps.googleusercontent.com',
+    androidClientId: '841113567422-brvrdcgvb26s21ku994mqisiefe7hk27.apps.googleusercontent.com',
+    webClientId: 'GOOGLE_GUID.apps.googleusercontent.com',
+  });
+
+  const [___, ____, fbPromptAsync] = Facebook.useAuthRequest({
     clientId: '229503536901618',
     redirectUri: 'https://auth.expo.io/@anzel/khojkhaz',
   });
@@ -56,7 +70,43 @@ export const SignUpScreen = () => {
     }
   });
 
-  if (nativeRegister.isLoading || facebookRegister.isLoading) return <Loading />;
+  const googleRegister = useMutation(async () => {
+    const response = await googlePromptAsync();
+    if (response.type === 'success') {
+      const { access_token } = response.params;
+      console.log('access', access_token);
+
+      const user = await googleLoginOrRegister(access_token);
+      if (user) {
+        login(user);
+        navigation.goBack();
+      }
+    }
+  });
+
+  const appleRegister = useMutation(async () => {
+    const { identityToken } = await AppleAuthentication.signInAsync({
+      requestedScopes: [
+        AppleAuthentication.AppleAuthenticationScope.EMAIL,
+        AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
+      ],
+    });
+    if (identityToken) {
+      const user = await appleLoginOrRegister(identityToken);
+      if (user) {
+        login(user);
+        navigation.goBack;
+      }
+    }
+  });
+
+  if (
+    nativeRegister.isLoading ||
+    facebookRegister.isLoading ||
+    googleRegister.isLoading ||
+    appleRegister.isLoading
+  )
+    return <Loading />;
 
   return (
     <KeyboardAwareScrollView bounces={false}>
@@ -155,14 +205,14 @@ export const SignUpScreen = () => {
                 <GoogleButton
                   text="Sign Up with Google"
                   style={styles.button}
-                  onPress={() => console.log('google signup')}
+                  onPress={() => googleRegister.mutate()}
                 />
                 <FacebookButton
                   text="Sign Up with Facebook"
                   style={styles.button}
                   onPress={() => facebookRegister.mutate()}
                 />
-                <AppleButton type="sign-in" onPress={() => console.log('Apple signup')} />
+                <AppleButton type="sign-in" onPress={() => appleRegister.mutate()} />
               </>
             );
           }}

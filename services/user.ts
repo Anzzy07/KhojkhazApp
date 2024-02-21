@@ -47,3 +47,26 @@ export const facebookLoginOrRegister = async (accessToken: string) => {
     handleError(error);
   }
 };
+
+export const googleLoginOrRegister = async (accessToken: string) => {
+  try {
+    const { data }: DataRes = await axios.post(endpoints.google, {
+      accessToken,
+    });
+    if (data) return data;
+    return null;
+  } catch (error) {
+    handleError(error);
+  }
+};
+
+export const appleLoginOrRegister = async (identityToken: string) => {
+  try {
+    const { data }: DataRes = await axios.post(endpoints.apple, {
+      identityToken,
+    });
+    if (data) return data;
+  } catch (error) {
+    handleError(error);
+  }
+};
