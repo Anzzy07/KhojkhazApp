@@ -1,9 +1,15 @@
-import { FlatList, Pressable, Image, StyleSheet } from "react-native";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { WIDTH } from "../constants";
-import { useState, useRef } from "react";
+import { FlatList, Pressable, Image, StyleSheet } from 'react-native';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { WIDTH } from '../constants';
+import { useState, useRef } from 'react';
 
-export const ImageCarousel = ({ images }: { images: string[] }) => {
+export const ImageCarousel = ({
+  images,
+  onImagePress,
+}: {
+  images: string[];
+  onImagePress?: () => void;
+}) => {
   const flatListRef = useRef<FlatList | null>(null);
   const viewConfig = { viewAreaCoveragePercentThreshold: 95 };
   const [activeIndex, setActiveIndex] = useState(0);
@@ -51,20 +57,16 @@ export const ImageCarousel = ({ images }: { images: string[] }) => {
         viewabilityConfig={viewConfig}
         onViewableItemsChanged={onViewRef.current}
         renderItem={({ item }) => (
-          <Image source={{ uri: item }} style={styles.Image} />
+          <Pressable onPress={onImagePress}>
+            <Image source={{ uri: item }} style={styles.Image} />
+          </Pressable>
         )}
         keyExtractor={(item) => item}
       />
-      <Pressable
-        style={[styles.chevron, { left: 5 }]}
-        onPress={handlePressLeft}
-      >
+      <Pressable style={[styles.chevron, { left: 5 }]} onPress={handlePressLeft}>
         <MaterialCommunityIcons name="chevron-left" color="white" size={45} />
       </Pressable>
-      <Pressable
-        style={[styles.chevron, { right: 5 }]}
-        onPress={handlePressRight}
-      >
+      <Pressable style={[styles.chevron, { right: 5 }]} onPress={handlePressRight}>
         <MaterialCommunityIcons name="chevron-right" color="white" size={45} />
       </Pressable>
     </>
@@ -79,7 +81,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 5,
   },
   chevron: {
-    position: "absolute",
+    position: 'absolute',
     top: 95,
   },
 });

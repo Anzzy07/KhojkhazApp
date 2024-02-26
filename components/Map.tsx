@@ -9,6 +9,8 @@ import { Card } from '../components/Card';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Button } from '@ui-kitten/components';
 import { getPropertiesInArea } from 'data/properties';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList } from 'navigation';
 
 // used to persist the region if search area from the map
 let mapRegion: Region | undefined = undefined;
@@ -32,7 +34,7 @@ export const Map = ({
   const [showSearchAreaButton, setShowSearchAreaButton] = useState(false);
   const [boundingBox, setBoundingBox] = useState<number[]>([]); // used for searching properties in region
   const [region, setRegion] = useState<Region | undefined>(mapRegion ? mapRegion : undefined);
-  const navigation = useNavigation();
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
   useEffect(() => {
     if (location === 'Map Area') return;
@@ -124,7 +126,13 @@ export const Map = ({
               <MaterialCommunityIcons name="close" color={theme['color-primary-500']} size={24} />
             </TouchableOpacity>
           )}
-          <Card property={properties[activeIndex]} style={styles.card} />
+          <Card
+            property={properties[activeIndex]}
+            style={styles.card}
+            onPress={() =>
+              navigation.navigate('PropertyDetails', { propertyID: properties[activeIndex].id })
+            }
+          />
         </>
       )}
       {showSearchAreaButton && activeIndex === -1 && (

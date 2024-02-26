@@ -6,6 +6,7 @@ import { SignInScreen } from 'screens/SignInScreen';
 import { SignUpScreen } from 'screens/SignUpScreen';
 import { ForgotPasswordScreen } from 'screens/ForgotPasswordScreen';
 import { ResetPasswordScreen } from 'screens/ResetPasswordScreen';
+import { PropertyDetailsScreeen } from 'screens/PropertyDetailsScreeen';
 
 export type TabNavigatorParamList = {
   Search: undefined | SearchScreenParams;
@@ -21,6 +22,7 @@ export type RootStackParamList = {
   SignUp: undefined;
   ForgotPassword: undefined;
   ResetPassword: { token: string };
+  PropertyDetails: { propertyID: number };
 };
 
 export type SearchScreenParams = {
@@ -58,6 +60,11 @@ export default function RootStack() {
           <Stack.Screen
             name="ResetPassword"
             component={ResetPasswordScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="PropertyDetails"
+            component={PropertyDetailsScreeen}
             options={{ headerShown: false }}
           />
         </Stack.Group>
