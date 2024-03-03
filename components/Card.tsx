@@ -15,7 +15,7 @@ export const Card = ({
 }) => {
   return (
     <Pressable onPress={onPress} style={[styles.container, style]}>
-      <ImageCarousel onImagePress={onPress} images={property.images} />
+      <ImageCarousel onImagePress={onPress} images={property.images} chevronsShown />
       <CardInformation property={property} />
     </Pressable>
   );
