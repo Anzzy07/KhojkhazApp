@@ -2,6 +2,8 @@ import { Text, Button } from '@ui-kitten/components';
 import { View, StyleSheet, FlatList } from 'react-native';
 import { useState } from 'react';
 import LottieView from 'lottie-react-native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList } from 'navigation';
 import { Screen } from 'components/Screen';
 import { Row } from 'components/Row';
 import { theme } from 'theme';
@@ -10,11 +12,13 @@ import { Card } from 'components/Card';
 import { Property } from 'types/property';
 import { SignUpAndSignInButtons } from 'components/SignUpAndSignInButton';
 import { useAuth } from 'hooks/useAuth';
+import { useNavigation } from '@react-navigation/native';
 
 export const SavedScreen = () => {
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const { user } = useAuth();
-  const likedProperties = undefined;
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+  const likedProperties = properties;
   const contactedProperties = undefined;
   const applicationProperties = undefined;
 
@@ -46,7 +50,13 @@ export const SavedScreen = () => {
         showsVerticalScrollIndicator={false}
         data={properties}
         style={{ marginTop: 10 }}
-        renderItem={({ item }) => <Card property={item} style={styles.card} />}
+        renderItem={({ item }) => (
+          <Card
+            property={item}
+            style={styles.card}
+            onPress={() => navigation.navigate('PropertyDetails', { propertyID: item.id })}
+          />
+        )}
         keyExtractor={(item) => item.id.toString()}
       />
     );

@@ -34,7 +34,7 @@ export const Map = ({
   const [showSearchAreaButton, setShowSearchAreaButton] = useState(false);
   const [boundingBox, setBoundingBox] = useState<number[]>([]); // used for searching properties in region
   const [region, setRegion] = useState<Region | undefined>(mapRegion ? mapRegion : undefined);
-  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+  const navigation = useNavigation<RootStackParamList>();
 
   useEffect(() => {
     if (location === 'Map Area') return;

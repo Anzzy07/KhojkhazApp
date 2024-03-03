@@ -15,6 +15,8 @@ export type TabNavigatorParamList = {
 };
 
 export type RootStackParamList = {
+  setOptions(arg0: { tabBarStyle: { display: string } }): unknown;
+  navigate(arg0: string, arg1: { propertyID: number }): void;
   TabNavigator: NavigatorScreenParams<TabNavigatorParamList>;
   Modal: undefined;
   FindLocations: undefined;

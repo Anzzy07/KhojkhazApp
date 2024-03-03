@@ -11,11 +11,14 @@ import { Card } from '../components/Card';
 import { HEADERHEIGHT } from '../constants';
 import { AnimatedListHeader } from '../components/AnimatedListHeader';
 import { Map } from '../components/Map';
-import { SearchScreenParams } from 'navigation';
+import { RootStackParamList, SearchScreenParams } from 'navigation';
 import { Property } from 'types/property';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 export const SearchScreen = ({ route }: { route: { params: SearchScreenParams } }) => {
   const [mapShown, setMapShown] = useState<boolean>(false);
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const [scrollAnimation] = useState(new Animated.Value(0));
   const mapRef = useRef<MapView | null>(null);
   const [properties, setProperties] = useState<Property[]>([]);
@@ -91,7 +94,13 @@ export const SearchScreen = ({ route }: { route: { params: SearchScreenParams } 
               data={properties}
               keyExtractor={(item) => item.id.toString()}
               showsVerticalScrollIndicator={false}
-              renderItem={({ item }) => <Card style={{ marginVertical: 5 }} property={item} />}
+              renderItem={({ item }) => (
+                <Card
+                  style={{ marginVertical: 5 }}
+                  property={item}
+                  onPress={() => navigation.navigate('PropertyDetails', { propertyID: item.id })}
+                />
+              )}
             />
           ) : (
             <>
