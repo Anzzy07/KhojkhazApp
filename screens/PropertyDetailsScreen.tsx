@@ -1,9 +1,11 @@
 import { StyleSheet, FlatList, View, Dimensions } from 'react-native';
 import { Screen } from 'components/Screen';
+import { Divider } from '@ui-kitten/components';
 import { properties } from 'data/properties';
 import { ImageCarousel } from 'components/ImageCarousel';
 import { theme } from 'theme';
 import { PropertyHeaderSection } from 'components/propertyDetailsSections/PropertyHeaderSection';
+import { PricingAndFloorPlanSection } from 'components/propertyDetailsSections/PricingAndFloorPlanSection';
 
 export const PropertyDetailsScreen = ({ route }: { route: { params: { propertyID: number } } }) => {
   const index = properties.findIndex((i) => i.id === route.params.propertyID);
@@ -20,6 +22,8 @@ export const PropertyDetailsScreen = ({ route }: { route: { params: { propertyID
             ) : null}
             <View style={styles.contentContainer}>
               <PropertyHeaderSection property={item} />
+              <Divider style={styles.divider} />
+              <PricingAndFloorPlanSection property={item} />
             </View>
           </> //render images from image carosel component for property details
         )}
