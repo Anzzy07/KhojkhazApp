@@ -6,6 +6,8 @@ import { ImageCarousel } from 'components/ImageCarousel';
 import { theme } from 'theme';
 import { PropertyHeaderSection } from 'components/propertyDetailsSections/PropertyHeaderSection';
 import { PricingAndFloorPlanSection } from 'components/propertyDetailsSections/PricingAndFloorPlanSection';
+import { AboutSection } from 'components/propertyDetailsSections/AboutSection';
+import { ContactSection } from 'components/propertyDetailsSections/ContactSection';
 
 export const PropertyDetailsScreen = ({ route }: { route: { params: { propertyID: number } } }) => {
   const index = properties.findIndex((i) => i.id === route.params.propertyID);
@@ -24,6 +26,11 @@ export const PropertyDetailsScreen = ({ route }: { route: { params: { propertyID
               <PropertyHeaderSection property={item} />
               <Divider style={styles.divider} />
               <PricingAndFloorPlanSection property={item} />
+              <Divider style={styles.divider} />
+              <AboutSection property={item} />
+              <Divider style={styles.divider} />
+              <ContactSection property={item} />
+              <Divider style={styles.divider} />
             </View>
           </> //render images from image carosel component for property details
         )}

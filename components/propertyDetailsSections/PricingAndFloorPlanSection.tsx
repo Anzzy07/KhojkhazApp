@@ -2,10 +2,10 @@ import { useState, useEffect } from 'react';
 import { Text, Divider } from '@ui-kitten/components';
 import { StyleSheet, Image, View, TouchableOpacity } from 'react-native';
 
-import { Property } from 'types/property';
-import { TabBar } from 'components/TabBar';
-import { theme } from 'theme';
-import { Row } from 'components/Row';
+import { Property } from '../../types/property';
+import { theme } from '../../theme';
+import { Row } from '../Row';
+import { TabBar } from '../TabBar';
 
 const removeUnnecessaryButtons = (
   array: {
@@ -21,21 +21,21 @@ const removeUnnecessaryButtons = (
 };
 
 export const PricingAndFloorPlanSection = ({ property }: { property: Property }) => {
-  const [currentApartments, setCurrentApartments] = useState(property.appartments);
+  const [currentApartments, setCurrentApartments] = useState(property.apartments);
 
   useEffect(() => {
-    if (property.appartments !== currentApartments) {
-      setCurrentApartments(property.appartments);
+    if (property.apartments !== currentApartments) {
+      setCurrentApartments(property.apartments);
     }
   }, [property]);
 
   const filterByBedroom = (numOfBedrooms: number, equalityType: 'gt' | 'eq') => {
-    if (property.appartments) {
+    if (property.apartments) {
       let filtered;
 
       if (equalityType === 'eq')
-        filtered = property.appartments.filter((i) => i.bedrooms === numOfBedrooms);
-      else filtered = property.appartments.filter((i) => i.bedrooms > numOfBedrooms);
+        filtered = property.apartments.filter((i) => i.bedrooms === numOfBedrooms);
+      else filtered = property.apartments.filter((i) => i.bedrooms > numOfBedrooms);
       setCurrentApartments(filtered);
     }
   };
@@ -43,7 +43,7 @@ export const PricingAndFloorPlanSection = ({ property }: { property: Property })
   const floorPlanOptions = [
     {
       title: 'All',
-      onPress: () => setCurrentApartments(property.appartments),
+      onPress: () => setCurrentApartments(property.apartments),
     },
     {
       title: 'Studio',
@@ -67,12 +67,12 @@ export const PricingAndFloorPlanSection = ({ property }: { property: Property })
     contains1Bed,
     contains2Bed,
     contains3Plus = false;
-  if (property.appartments && property.appartments.length > 0) {
-    for (let i in property.appartments) {
-      if (property.appartments[i].bedrooms === 0) containsStudio = true;
-      if (property.appartments[i].bedrooms === 1) contains1Bed = true;
-      if (property.appartments[i].bedrooms === 2) contains2Bed = true;
-      if (property.appartments[i].bedrooms >= 3) contains3Plus = true;
+  if (property.apartments && property.apartments.length > 0) {
+    for (let i in property.apartments) {
+      if (property.apartments[i].bedrooms === 0) containsStudio = true;
+      if (property.apartments[i].bedrooms === 1) contains1Bed = true;
+      if (property.apartments[i].bedrooms === 2) contains2Bed = true;
+      if (property.apartments[i].bedrooms >= 3) contains3Plus = true;
     }
     if (!containsStudio) removeUnnecessaryButtons(floorPlanOptions, 'Studio');
     if (!contains1Bed) removeUnnecessaryButtons(floorPlanOptions, '1 Bedroom');
@@ -88,7 +88,8 @@ export const PricingAndFloorPlanSection = ({ property }: { property: Property })
       {currentApartments && currentApartments.length > 0 ? (
         <>
           <TabBar tabs={floorPlanOptions} style={styles.defaultMarginVertical} />
-          {currentApartments.map((i) => {
+
+          {currentApartments.map((i) => (
             <View style={[styles.container, styles.defaultMarginVertical]} key={i.ID.toString()}>
               <Row>
                 <View style={styles.apartmentLogisticsContainer}>
@@ -146,19 +147,15 @@ export const PricingAndFloorPlanSection = ({ property }: { property: Property })
                   {i.sqFt.toLocaleString('en-US')}
                 </Text>
                 <Text category={'c1'} style={styles.availableText}>
-                  {new Date().toLocaleDateString('en', {
-                    year: 'numeric',
-                    month: '2-digit',
-                    day: 'numeric',
-                  })}
+                  {new Date(i.availableOn).toLocaleDateString()}
                 </Text>
               </Row>
               <Divider style={styles.divider} />
-            </View>;
-          })}
+            </View>
+          ))}
         </>
       ) : (
-        <Text style={styles.apartmentLogisticsTitle}>No Properties Listed</Text>
+        <Text style={styles.apartmentLogisticsTitle}>No Apartments Listed</Text>
       )}
     </>
   );

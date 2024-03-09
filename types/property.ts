@@ -34,5 +34,5 @@ export type Property = {
   stars: number;
   reviews: Review[];
   features?: string[];
-  appartments?: Apartment[];
+  apartments?: Apartment[];
 };

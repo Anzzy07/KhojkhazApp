@@ -17,7 +17,7 @@ export const CardInformation = ({ property }: { property: Property }) => {
       </Row>
       <Text category={'c1'}>
         {' '}
-        {property.bedroomLow} - {property.bedroomHigh} Beds
+        {property.bedroomLow === 0 ? 'Studio' : property.bedroomLow} - {property.bedroomHigh} Beds
       </Text>
       <Text category={'c1'} style={styles.defaultMarginTop}>
         {' '}

@@ -7,6 +7,8 @@ export const properties: Property[] = [
       'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3FID%3DOIP.P4DMJbCaao_dpIs5dCb6IgHaLH%26pid%3DApi&f=1',
       'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.iE7mcw3w2aFFDhXP9A1lggHaE8%26pid%3DApi&f=1',
     ],
+    about:
+      'At 7 West, urban apartment-life decadence extends beyond your front door. Elevate your lifestyle with gracious concierge services including packages and dry cleaning delivered straight to your door. Enjoy the fun and frequent resident activities like our weekly “Wake Up with Weidner” that includes a free breakfast and “Pizza Night.” Grab a slice, get to know your neighbors and make new friends. Get healthy in our state-of-the-art fitness center and achieve enlightenment in our calming yoga studio. Take advantage of the gorgeous resident lounge complete with kitchen and free wifi to relax, work and study. Challenge your neighbor to a billiards match in the game room, and entertain friends and family on the rooftop terrace or reserve the clubhouse for special occasions. You can also rest assured with controlled access to the building, an underground heated parking garage and a courtesy security patrol. We have furnished apartments available, and we’re a pet-friendly apartment community, complete with a “Yappy Hour” for residents and their dogs to mingle and make friends.',
     rentLow: 3750,
     rentHigh: 31054,
     bedroomLow: 1,
@@ -19,7 +21,7 @@ export const properties: Property[] = [
     tags: ['Parking'],
     lat: 27.696613768446387,
     lng: 85.34371285779233,
-    appartments: [
+    apartments: [
       {
         CreatedAt: '2022-05-09T19:27:23.084252-05:00',
         DeletedAt: null,
@@ -86,6 +88,19 @@ export const properties: Property[] = [
         unit: '0308',
       },
     ],
+    features: [
+      'Studio, 1 Bedroom, and 2 Bedroom and Bathroom Apartments',
+      'Amazing Views of Downtown Miami',
+      '14 Private Offices',
+      '40 Meeting Tables',
+      'Flaming Kitchen',
+      'Balcony Views Of 4th Street Se',
+      'Spa',
+      'Views Of The Amenities Deck',
+      'Underground Parking',
+    ],
+    phoneNumber: '9869421325',
+    website: 'anzel307.com',
   },
   {
     id: 2,
@@ -94,6 +109,8 @@ export const properties: Property[] = [
       'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.Q5Eunmn9ENDDwvQPZBCRdwHaE7%26pid%3DApi&f=1',
       'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.Oe74GIp-Ini-tIVYe0bH6wHaE7%26pid%3DApi&f=1',
     ],
+    about:
+      'At 7 West, urban apartment-life decadence extends beyond your front door. Elevate your lifestyle with gracious concierge services including packages and dry cleaning delivered straight to your door. Enjoy the fun and frequent resident activities like our weekly “Wake Up with Weidner” that includes a free breakfast and “Pizza Night.” Grab a slice, get to know your neighbors and make new friends. Get healthy in our state-of-the-art fitness center and achieve enlightenment in our calming yoga studio. Take advantage of the gorgeous resident lounge complete with kitchen and free wifi to relax, work and study. Challenge your neighbor to a billiards match in the game room, and entertain friends and family on the rooftop terrace or reserve the clubhouse for special occasions. You can also rest assured with controlled access to the building, an underground heated parking garage and a courtesy security patrol. We have furnished apartments available, and we’re a pet-friendly apartment community, complete with a “Yappy Hour” for residents and their dogs to mingle and make friends.',
     rentLow: 3750,
     rentHigh: 31054,
     bedroomLow: 1,
@@ -106,7 +123,7 @@ export const properties: Property[] = [
     tags: ['Parking'],
     lat: 27.67227868577266,
     lng: 85.42808620679408,
-    appartments: [
+    apartments: [
       {
         CreatedAt: '2022-05-09T19:27:23.084252-05:00',
         DeletedAt: null,
@@ -173,6 +190,19 @@ export const properties: Property[] = [
         unit: '0308',
       },
     ],
+    features: [
+      'Studio, 1 Bedroom, and 2 Bedroom and Bathroom Apartments',
+      'Amazing Views of Downtown Miami',
+      '14 Private Offices',
+      '40 Meeting Tables',
+      'Flaming Kitchen',
+      'Balcony Views Of 4th Street Se',
+      'Spa',
+      'Views Of The Amenities Deck',
+      'Underground Parking',
+    ],
+    phoneNumber: '9869421325',
+    website: 'anzel307.com',
   },
   {
     id: 3,
@@ -180,6 +210,8 @@ export const properties: Property[] = [
       'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3FID%3DOIP.P4DMJbCaao_dpIs5dCb6IgHaLH%26pid%3DApi&f=1',
       'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.iE7mcw3w2aFFDhXP9A1lggHaE8%26pid%3DApi&f=1',
     ],
+    about:
+      'At 7 West, urban apartment-life decadence extends beyond your front door. Elevate your lifestyle with gracious concierge services including packages and dry cleaning delivered straight to your door. Enjoy the fun and frequent resident activities like our weekly “Wake Up with Weidner” that includes a free breakfast and “Pizza Night.” Grab a slice, get to know your neighbors and make new friends. Get healthy in our state-of-the-art fitness center and achieve enlightenment in our calming yoga studio. Take advantage of the gorgeous resident lounge complete with kitchen and free wifi to relax, work and study. Challenge your neighbor to a billiards match in the game room, and entertain friends and family on the rooftop terrace or reserve the clubhouse for special occasions. You can also rest assured with controlled access to the building, an underground heated parking garage and a courtesy security patrol. We have furnished apartments available, and we’re a pet-friendly apartment community, complete with a “Yappy Hour” for residents and their dogs to mingle and make friends.',
     rentLow: 3750,
     rentHigh: 31054,
     bedroomLow: 1,
@@ -192,7 +224,7 @@ export const properties: Property[] = [
     tags: ['Parking'],
     lat: 27.661567906336888,
     lng: 85.33139037393275,
-    appartments: [
+    apartments: [
       {
         CreatedAt: '2022-05-09T19:27:23.084252-05:00',
         DeletedAt: null,
@@ -259,6 +291,19 @@ export const properties: Property[] = [
         unit: '0308',
       },
     ],
+    features: [
+      'Studio, 1 Bedroom, and 2 Bedroom and Bathroom Apartments',
+      'Amazing Views of Downtown Miami',
+      '14 Private Offices',
+      '40 Meeting Tables',
+      'Flaming Kitchen',
+      'Balcony Views Of 4th Street Se',
+      'Spa',
+      'Views Of The Amenities Deck',
+      'Underground Parking',
+    ],
+    phoneNumber: '9869421325',
+    website: 'anzel307.com',
   },
   {
     id: 4,
@@ -266,6 +311,8 @@ export const properties: Property[] = [
       'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3FID%3DOIP.P4DMJbCaao_dpIs5dCb6IgHaLH%26pid%3DApi&f=1',
       'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.iE7mcw3w2aFFDhXP9A1lggHaE8%26pid%3DApi&f=1',
     ],
+    about:
+      'At 7 West, urban apartment-life decadence extends beyond your front door. Elevate your lifestyle with gracious concierge services including packages and dry cleaning delivered straight to your door. Enjoy the fun and frequent resident activities like our weekly “Wake Up with Weidner” that includes a free breakfast and “Pizza Night.” Grab a slice, get to know your neighbors and make new friends. Get healthy in our state-of-the-art fitness center and achieve enlightenment in our calming yoga studio. Take advantage of the gorgeous resident lounge complete with kitchen and free wifi to relax, work and study. Challenge your neighbor to a billiards match in the game room, and entertain friends and family on the rooftop terrace or reserve the clubhouse for special occasions. You can also rest assured with controlled access to the building, an underground heated parking garage and a courtesy security patrol. We have furnished apartments available, and we’re a pet-friendly apartment community, complete with a “Yappy Hour” for residents and their dogs to mingle and make friends.',
     rentLow: 3750,
     rentHigh: 31054,
     bedroomLow: 1,
@@ -278,7 +325,7 @@ export const properties: Property[] = [
     tags: ['Parking'],
     lat: 27.675073807323113,
     lng: 85.37527048664329,
-    appartments: [
+    apartments: [
       {
         CreatedAt: '2022-05-09T19:27:23.084252-05:00',
         DeletedAt: null,
@@ -345,6 +392,19 @@ export const properties: Property[] = [
         unit: '0308',
       },
     ],
+    features: [
+      'Studio, 1 Bedroom, and 2 Bedroom and Bathroom Apartments',
+      'Amazing Views of Downtown Miami',
+      '14 Private Offices',
+      '40 Meeting Tables',
+      'Flaming Kitchen',
+      'Balcony Views Of 4th Street Se',
+      'Spa',
+      'Views Of The Amenities Deck',
+      'Underground Parking',
+    ],
+    phoneNumber: '9869421325',
+    website: 'anzel307.com',
   },
   {
     id: 5,
@@ -355,6 +415,8 @@ export const properties: Property[] = [
       'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.P4DMJbCaao_dpIs5dCb6IgHaLH%26pid%3DApi&f=1',
       'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.Oe74GIp-Ini-tIVYe0bH6wHaE7%26pid%3DApi&f=1',
     ],
+    about:
+      'At 7 West, urban apartment-life decadence extends beyond your front door. Elevate your lifestyle with gracious concierge services including packages and dry cleaning delivered straight to your door. Enjoy the fun and frequent resident activities like our weekly “Wake Up with Weidner” that includes a free breakfast and “Pizza Night.” Grab a slice, get to know your neighbors and make new friends. Get healthy in our state-of-the-art fitness center and achieve enlightenment in our calming yoga studio. Take advantage of the gorgeous resident lounge complete with kitchen and free wifi to relax, work and study. Challenge your neighbor to a billiards match in the game room, and entertain friends and family on the rooftop terrace or reserve the clubhouse for special occasions. You can also rest assured with controlled access to the building, an underground heated parking garage and a courtesy security patrol. We have furnished apartments available, and we’re a pet-friendly apartment community, complete with a “Yappy Hour” for residents and their dogs to mingle and make friends.',
     rentLow: 3750,
     rentHigh: 31054,
     bedroomLow: 1,
@@ -367,7 +429,7 @@ export const properties: Property[] = [
     tags: ['Parking'],
     lat: 27.716168689191132,
     lng: 85.4280731023246,
-    appartments: [
+    apartments: [
       {
         CreatedAt: '2022-05-09T19:27:23.084252-05:00',
         DeletedAt: null,
@@ -382,6 +444,19 @@ export const properties: Property[] = [
         unit: '0204',
       },
     ],
+    features: [
+      'Studio, 1 Bedroom, and 2 Bedroom and Bathroom Apartments',
+      'Amazing Views of Downtown Miami',
+      '14 Private Offices',
+      '40 Meeting Tables',
+      'Flaming Kitchen',
+      'Balcony Views Of 4th Street Se',
+      'Spa',
+      'Views Of The Amenities Deck',
+      'Underground Parking',
+    ],
+    phoneNumber: '9869421325',
+    website: 'anzel307.com',
   },
 ];
 
