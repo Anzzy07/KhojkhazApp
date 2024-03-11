@@ -8,6 +8,8 @@ import { Row } from '../Row';
 import { Property } from '../../types/property';
 import { callPhoneNumber } from 'utils/callPhoneNumber';
 import { openURL } from 'utils/openURL';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList } from 'navigation';
 
 const formatPhoneNumber = (str: string) => {
   let cleaned = ('' + str).replace(/\D/g, '');
@@ -20,7 +22,7 @@ const formatPhoneNumber = (str: string) => {
 };
 
 export const ContactSection = ({ property }: { property: Property }) => {
-  const Navigation = useNavigation();
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
   return (
     <>
@@ -55,10 +57,10 @@ export const ContactSection = ({ property }: { property: Property }) => {
           style={styles.button}
           appearance={'ghost'}
           onPress={() => {
-            // navigation.navigate("MessageProperty", {
-            //   propertyID: property.ID,
-            //   tour: true,
-            // });
+            navigation.navigate('Message', {
+              propertyID: property.id,
+              tour: true,
+            });
           }}>
           Tour
         </Button>
@@ -66,9 +68,9 @@ export const ContactSection = ({ property }: { property: Property }) => {
           style={styles.button}
           appearance={'ghost'}
           onPress={() => {
-            // navigation.navigate("MessageProperty", {
-            //   propertyID: property.ID,
-            // });
+            navigation.navigate('Message', {
+              propertyID: property.id,
+            });
           }}>
           Message
         </Button>

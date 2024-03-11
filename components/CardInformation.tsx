@@ -5,8 +5,13 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { theme } from '../theme';
 import { Property } from '../types/property';
 import { Row } from '../components/Row';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList } from 'navigation';
+import { useNavigation } from '@react-navigation/native';
+import { callPhoneNumber } from 'utils/callPhoneNumber';
 
 export const CardInformation = ({ property }: { property: Property }) => {
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   return (
     <View style={styles.informationContainer}>
       <Row style={styles.rowJustification}>
@@ -42,13 +47,13 @@ export const CardInformation = ({ property }: { property: Property }) => {
             styles.Button,
           ]}
           size="small"
-          onPress={() => console.log('email the item manager')}>
+          onPress={() => navigation.navigate('Message', { propertyID: property.id })}>
           Email
         </Button>
         <Button
           style={styles.Button}
           size="small"
-          onPress={() => console.log('call the item manager')}>
+          onPress={() => callPhoneNumber(property.phoneNumber)}>
           Call
         </Button>
       </Row>

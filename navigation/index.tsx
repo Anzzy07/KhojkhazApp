@@ -7,6 +7,7 @@ import { SignUpScreen } from 'screens/SignUpScreen';
 import { ForgotPasswordScreen } from 'screens/ForgotPasswordScreen';
 import { ResetPasswordScreen } from 'screens/ResetPasswordScreen';
 import { PropertyDetailsScreen } from 'screens/PropertyDetailsScreen';
+import { MessageScreen } from 'screens/MessageScreen';
 
 export type TabNavigatorParamList = {
   Search: undefined | SearchScreenParams;
@@ -25,6 +26,7 @@ export type RootStackParamList = {
   ForgotPassword: undefined;
   ResetPassword: { token: string };
   PropertyDetails: { propertyID: number };
+  Message: { propertyID: number; tour?: boolean };
 };
 
 export type SearchScreenParams = {
@@ -69,6 +71,7 @@ export default function RootStack() {
             component={PropertyDetailsScreen}
             options={{ headerShown: false }}
           />
+          <Stack.Screen name="Message" component={MessageScreen} options={{ headerShown: false }} />
         </Stack.Group>
       </Stack.Navigator>
     </NavigationContainer>
