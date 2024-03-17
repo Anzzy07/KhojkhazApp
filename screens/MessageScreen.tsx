@@ -12,7 +12,6 @@ import { getStateAbbreviation } from 'utils/getStateAbbreviation';
 import { Row } from 'components/Row';
 import { useAuth } from 'hooks/useAuth';
 import { properties } from 'data/properties';
-import { theme } from 'theme';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from 'navigation';
 import { useState } from 'react';
@@ -48,7 +47,7 @@ export const MessageScreen = ({
             </Text>
           </View>
         </Row>
-
+        {/* Formik and Yup, handling form state and validating each field is much easier and efficient */}
         <Formik
           initialValues={{
             firstName: user ? user.firstName : '',
@@ -135,7 +134,7 @@ export const MessageScreen = ({
                   </Pressable>
                 </View>
 
-                {showCalender && (
+                {/* {showCalender && (
                   <DateTimePicker
                     value={pickedDate}
                     mode="date"
@@ -146,7 +145,7 @@ export const MessageScreen = ({
                       }
                     }}
                   />
-                )}
+                )}  */}
 
                 <Input
                   style={styles.input}
