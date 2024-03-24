@@ -10,6 +10,7 @@ import { AboutSection } from 'components/propertyDetailsSections/AboutSection';
 import { ContactSection } from 'components/propertyDetailsSections/ContactSection';
 import { AmentitiesSection } from 'components/propertyDetailsSections/AmenitiesSection';
 import { LeaseAndFeesSection } from '../components/propertyDetailsSections/LeaseAndFeesSection';
+import { LocationSection } from 'components/propertyDetailsSections/LocationSection';
 
 export const PropertyDetailsScreen = ({ route }: { route: { params: { propertyID: number } } }) => {
   const index = properties.findIndex((i) => i.id === route.params.propertyID);
@@ -36,6 +37,8 @@ export const PropertyDetailsScreen = ({ route }: { route: { params: { propertyID
               <AmentitiesSection property={item} />
               <Divider style={styles.divider} />
               <LeaseAndFeesSection property={item} />
+              <Divider style={styles.divider} />
+              <LocationSection property={item} />
             </View>
           </> //render images from image carosel component for property details
         )}

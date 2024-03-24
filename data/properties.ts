@@ -101,6 +101,10 @@ export const properties: Property[] = [
     ],
     phoneNumber: '9869421325',
     website: 'anzelacharya.com.np',
+    scores: [
+      { type: 'Walk', description: 'Very Walkable', score: 73 },
+      { type: 'Bike', description: 'Very Bikeable', score: 72 },
+    ],
   },
   {
     id: 2,
@@ -202,7 +206,7 @@ export const properties: Property[] = [
       'Underground Parking',
     ],
     phoneNumber: '9869421325',
-    website: 'anzelacharya.com.np',
+    website: 'www.twitter.com',
     pets: [
       {
         type: 'Dog',
@@ -222,6 +226,10 @@ export const properties: Property[] = [
         deposit: 100,
         rent: 50,
       },
+    ],
+    scores: [
+      { type: 'Walk', description: 'Very Walkable', score: 74 },
+      { type: 'Bike', description: 'Bikeable', score: 60 },
     ],
   },
   {
@@ -323,7 +331,7 @@ export const properties: Property[] = [
       'Underground Parking',
     ],
     phoneNumber: '9869421325',
-    website: 'anzelacharya.com.np',
+    website: 'www.instagram.com',
     pets: [
       {
         type: 'Dog',
@@ -343,6 +351,10 @@ export const properties: Property[] = [
         deposit: 100,
         rent: 50,
       },
+    ],
+    scores: [
+      { type: 'Walk', description: "Walker's Paradise", score: 95 },
+      { type: 'Bike', description: 'Very Bikeable', score: 84 },
     ],
   },
   {
@@ -444,7 +456,7 @@ export const properties: Property[] = [
       'Underground Parking',
     ],
     phoneNumber: '9869421325',
-    website: 'anzelacharya.com.np',
+    website: 'www.facebook.com',
     pets: [
       {
         type: 'Dog',
@@ -464,6 +476,10 @@ export const properties: Property[] = [
         deposit: 100,
         rent: 50,
       },
+    ],
+    scores: [
+      { type: 'Walk', description: 'Very Walkable', score: 88 },
+      { type: 'Bike', description: 'Bikeable', score: 68 },
     ],
   },
   {
@@ -516,7 +532,7 @@ export const properties: Property[] = [
       'Underground Parking',
     ],
     phoneNumber: '9869421325',
-    website: 'anzelacharya.com.np',
+    website: 'www.google.com',
     pets: [
       {
         type: 'Dog',
@@ -536,6 +552,10 @@ export const properties: Property[] = [
         deposit: 100,
         rent: 50,
       },
+    ],
+    scores: [
+      { type: 'Walk', description: 'Very Walkable', score: 85 },
+      { type: 'Bike', description: 'Very Bikeable', score: 72 },
     ],
   },
 ];
