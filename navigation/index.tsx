@@ -1,8 +1,6 @@
 import { NavigationContainer, NavigatorScreenParams } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import TabNavigator from './tab-navigator';
-import { LinkingOptions } from '@react-navigation/native';
-import * as Linking from 'expo-linking';
 import { FindLocationsScreen } from 'screens/FindLocationsScreen';
 import { SignInScreen } from 'screens/SignInScreen';
 import { SignUpScreen } from 'screens/SignUpScreen';
@@ -39,28 +37,6 @@ export type SearchScreenParams = {
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
-
-export const linking: LinkingOptions<RootStackParamList> = {
-  prefixes: [Linking.createURL('/')],
-  config: {
-    screens: {
-      TabNavigator: {
-        screens: {
-          Search: 'search',
-          Saved: 'saved',
-          Account: 'account',
-        },
-      },
-      FindLocations: 'findLocations',
-      ForgotPassword: 'forgotPassword',
-      Message: 'message',
-      PropertyDetails: 'propertydetails',
-      ResetPassword: { path: 'resetpassword/:token' },
-      SignIn: 'signin',
-      SignUp: 'signup',
-    },
-  },
-};
 
 export default function RootStack() {
   return (
