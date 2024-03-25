@@ -1,21 +1,46 @@
 import { StyleSheet } from 'react-native';
-import { Text, Input, Button } from '@ui-kitten/components';
+import { Text, Button } from '@ui-kitten/components';
 import * as yup from 'yup';
 import { Formik } from 'formik';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { Screen } from 'components/Screen';
-import { ModalHeader } from 'components/ModalHeader';
-import { GoogleButton } from 'components/GoogleButton';
-import { FacebookButton } from 'components/FacebookButton';
-import { AppleButton } from 'components/AppleButton';
-import { PasswordInput } from 'components/PasswordInput';
-import { OrDivider } from 'components/OrDivider';
 import { useNavigation } from '@react-navigation/native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from 'navigation';
+import axios from 'axios';
+import { useMutation } from 'react-query';
+
+import { Screen } from 'components/Screen';
+import { ModalHeader } from 'components/ModalHeader';
+import { PasswordInput } from 'components/PasswordInput';
+import { Loading } from 'components/loading';
+import { endpoints } from '../constants';
 
 export const ResetPasswordScreen = ({ route }: { route: { params: { token: string } } }) => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+
+  const resetPassword = useMutation(
+    async (password: string) => {
+      return axios.post(
+        endpoints.resetPassword,
+        { password },
+        {
+          headers: {
+            Authorization: `Bearer ${route.params.token}`,
+          },
+        }
+      );
+    },
+    {
+      onSuccess() {
+        navigation.navigate('SignIn');
+      },
+      onError(error: any) {
+        if (error.response.status === 401) return alert('Invalid or Expired Tokem');
+      },
+    }
+  );
+
+  if (resetPassword.isLoading) return <Loading />;
 
   return (
     <KeyboardAwareScrollView bounces={false}>
@@ -43,8 +68,7 @@ export const ResetPasswordScreen = ({ route }: { route: { params: { token: strin
               .required('Required'),
           })}
           onSubmit={(values) => {
-            console.log('Send values to server', values);
-            navigation.navigate('SignIn');
+            resetPassword.mutate(values.password);
           }}>
           {({
             values,
