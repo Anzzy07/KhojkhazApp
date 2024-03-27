@@ -1,4 +1,3 @@
-import React from 'react';
 import { useState } from 'react';
 import { Platform, StyleSheet, View, FlatList, TouchableOpacity, ScrollView } from 'react-native';
 import { Input, Text, Button } from '@ui-kitten/components';
