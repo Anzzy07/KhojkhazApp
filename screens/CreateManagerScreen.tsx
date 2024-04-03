@@ -6,31 +6,62 @@ import { Formik } from 'formik';
 import * as yup from 'yup';
 import * as ImagePicker from 'expo-image-picker';
 import RNPhoneInput from 'react-native-phone-number-input';
+import { useMutation } from 'react-query';
+import axios from 'axios';
 
 import { Screen } from 'components/Screen';
 import { ModalHeader } from 'components/ModalHeader';
 import { PhoneInput } from 'components/PhoneInput';
+import { useAuth } from 'hooks/useAuth';
+import { endpoints } from '../constants';
+import { Loading } from 'components/loading';
 
-export const CreateManagerScreen = () => {
+export const CreateManagerScreen = ({ refetchManagers }: { refetchManagers?: () => void }) => {
   const [imageURI, setImageURI] = useState('');
   const phoneRef = useRef<RNPhoneInput>(null);
+  const { user } = useAuth();
 
-  const pickImage = async () => {
+  const pickImage = async (setBase64Image: (field: string, value: any) => void, field: string) => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
+      base64: true,
     });
 
     if (!result.canceled) {
+      setBase64Image(field, result.assets[0].base64 as string);
       setImageURI(result.assets[0].uri);
     }
   };
 
-  const createManager = () => {
-    console.log('Doing in backend');
-  };
+  const createManager = useMutation(
+    (values: {
+      name: string;
+      email: string;
+      phoneNumber: string;
+      website: string;
+      image: string;
+    }) => {
+      return axios.post(endpoints.createManager, {
+        userID: user?.ID,
+        name: values.name,
+        email: values.email,
+        phoneNumber: values.phoneNumber,
+        website: values.website,
+        image: values.image,
+      });
+    },
+    {
+      onSuccess(data) {
+        if (refetchManagers) refetchManagers();
+      },
+      onError() {
+        alert('Unable to create Manager');
+      },
+    }
+  );
+
+  if (createManager.isLoading) return <Loading />;
 
   return (
     <KeyboardAwareScrollView bounces={false}>
@@ -64,7 +95,7 @@ export const CreateManagerScreen = () => {
               if (values.phoneNumber && !phoneRef.current?.isValidNumber(values.phoneNumber))
                 return;
 
-              createManager();
+              createManager.mutate(values);
             }}>
             {({
               values,
@@ -124,7 +155,9 @@ export const CreateManagerScreen = () => {
                   />
 
                   {imageURI ? (
-                    <Pressable style={styles.imageContainer} onPress={() => pickImage()}>
+                    <Pressable
+                      style={styles.imageContainer}
+                      onPress={() => pickImage(setFieldValue, 'image')}>
                       <Image source={{ uri: imageURI }} style={styles.image} />
                       <Button
                         status={'info'}
@@ -141,7 +174,7 @@ export const CreateManagerScreen = () => {
                   <Button
                     appearance={'ghost'}
                     style={styles.signInButton}
-                    onPress={() => pickImage()}>
+                    onPress={() => pickImage(setFieldValue, 'image')}>
                     {imageURI ? 'Update Image' : 'Add Image'}
                   </Button>
 

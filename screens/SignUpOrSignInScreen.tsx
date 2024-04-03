@@ -9,7 +9,7 @@ import { SignUpAndSignInButtons } from 'components/SignUpAndSignInButton';
 export const SignUpOrSignInScreen = () => {
   return (
     <Screen>
-      <ModalHeader text="JPApartments" xShown />
+      <ModalHeader text="Khojkhaz" xShown />
       <View style={styles.container}>
         <Text category={'h5'} style={styles.header}>
           Add Your Properties
