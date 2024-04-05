@@ -56,7 +56,7 @@ export const CreateManagerScreen = ({ refetchManagers }: { refetchManagers?: () 
         if (refetchManagers) refetchManagers();
       },
       onError() {
-        alert('Unable to create Manager');
+        alert('Unable to create manager');
       },
     }
   );

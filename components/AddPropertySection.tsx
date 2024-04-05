@@ -1,16 +1,16 @@
 import { KeyboardAwareFlatList } from 'react-native-keyboard-aware-scroll-view';
 import { Text, Input, Divider, Button } from '@ui-kitten/components';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import { Formik } from 'formik';
 
 import { Screen } from './Screen';
 import { ModalHeader } from './ModalHeader';
-import { Formik } from 'formik';
 
 export const AddPropertySection = () => {
   return (
     <KeyboardAwareFlatList
       data={[1]}
-      renderItem={({ item }) => (
+      renderItem={() => (
         <Screen>
           <ModalHeader text="Khojkhaz" xShown />
           <View style={styles.container}>
