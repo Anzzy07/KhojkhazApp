@@ -5,6 +5,8 @@ import { Formik } from 'formik';
 
 import { Screen } from './Screen';
 import { ModalHeader } from './ModalHeader';
+import { Row } from './Row';
+import { UnitButton } from './UnitButton';
 
 export const AddPropertySection = () => {
   return (
@@ -18,7 +20,11 @@ export const AddPropertySection = () => {
               Add a Property
             </Text>
 
-            <Formik initialValues={{}} onSubmit={(values) => console.log(values)}>
+            <Formik
+              initialValues={{
+                unitType: 'single',
+              }}
+              onSubmit={(values) => console.log(values)}>
               {({
                 values,
                 errors,
@@ -28,7 +34,24 @@ export const AddPropertySection = () => {
                 setFieldValue,
                 handleChange,
               }) => {
-                return <View></View>;
+                return (
+                  <View>
+                    <Row style={styles.row}>
+                      <UnitButton
+                        text="Single Property"
+                        iconName="home"
+                        active={values.unitType === 'single' ? true : false}
+                        onPress={() => setFieldValue('unitType', 'single')}
+                      />
+                      <UnitButton
+                        text="Multiple Property"
+                        iconName="apartment"
+                        active={values.unitType === 'multiple' ? true : false}
+                        onPress={() => setFieldValue('unitType', 'multiple')}
+                      />
+                    </Row>
+                  </View>
+                );
               }}
             </Formik>
           </View>
@@ -42,4 +65,7 @@ export const AddPropertySection = () => {
 const styles = StyleSheet.create({
   container: { marginHorizontal: 10 },
   header: { marginVertical: 20, textAlign: 'center' },
+  row: {
+    justifyContent: 'space-evenly',
+  },
 });
