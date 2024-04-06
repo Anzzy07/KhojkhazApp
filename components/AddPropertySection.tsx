@@ -1,9 +1,11 @@
 import { KeyboardAwareFlatList } from 'react-native-keyboard-aware-scroll-view';
-import { Text, Input } from '@ui-kitten/components';
-import { View, StyleSheet } from 'react-native';
+import { Text, Input, Divider, Button } from '@ui-kitten/components';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { Formik } from 'formik';
 import { useState } from 'react';
 import { PickerItem } from 'react-native-woodpicker';
+import { MaterialIcons } from '@expo/vector-icons';
+import * as yup from 'yup';
 
 import { Screen } from './Screen';
 import { ModalHeader } from './ModalHeader';
@@ -13,6 +15,7 @@ import { SearchLocation } from 'types/locationIQ';
 import { SearchAddress } from './SearchAddress';
 import { getStateAbbreviation } from 'utils/getStateAbbreviation';
 import { Select } from './Select';
+import { theme } from '../theme';
 
 export const AddPropertySection = () => {
   const [searchingLocation, setSearchingLocation] = useState(false);
@@ -36,16 +39,8 @@ export const AddPropertySection = () => {
             )}
 
             <Formik
-              initialValues={{
-                unitType: 'single',
-                street: '',
-                city: '',
-                state: '',
-                zip: '',
-                lat: '',
-                lng: '',
-                propertyType: propertyTypes[0],
-              }}
+              initialValues={initialValues}
+              validationSchema={validationSchema}
               onSubmit={(values) => console.log(values)}>
               {({
                 values,
@@ -99,6 +94,24 @@ export const AddPropertySection = () => {
                       defaultLocation={currentLocation}
                     />
                   );
+
+                const addUnit = () => {
+                  const currUnits = [...values.units];
+                  currUnits.push({
+                    unit: '',
+                    bedrooms: bedValues[0],
+                    bathrooms: bathValues[0],
+                  });
+
+                  setFieldValue('units', currUnits);
+                };
+
+                const removeUnit = (index: number) => {
+                  const currUnits = [...values.units];
+                  const newUnits = currUnits.filter((i, idx) => index !== idx);
+                  setFieldValue('units', newUnits);
+                };
+
                 return (
                   <View>
                     <Row style={styles.row}>
@@ -140,6 +153,114 @@ export const AddPropertySection = () => {
                       isNullable={false}
                       style={styles.input}
                     />
+
+                    {values.unitType === 'single' ? (
+                      <Row style={[styles.input, styles.unitRow]}>
+                        <Select
+                          label="Beds"
+                          item={values.unit.bedrooms}
+                          items={bedValues}
+                          onItemChange={(item) => {
+                            setFieldValue('unit.bedrooms', item);
+                          }}
+                          isNullable={false}
+                          style={styles.smallSelect}
+                        />
+                        <Select
+                          label="Baths"
+                          item={values.unit.bathrooms}
+                          items={bathValues}
+                          onItemChange={(item) => {
+                            setFieldValue('unit.bathrooms', item);
+                          }}
+                          isNullable={false}
+                          style={styles.smallSelect}
+                        />
+                      </Row>
+                    ) : (
+                      <>
+                        <TouchableOpacity style={styles.addUnit} onPress={addUnit}>
+                          <MaterialIcons
+                            name="add-circle-outline"
+                            size={20}
+                            color={theme['color-info-500']}
+                          />
+                          <Text category={'s2'} status="info" style={styles.addUnitText}>
+                            Add Another Unit
+                          </Text>
+                        </TouchableOpacity>
+
+                        {values.units.map((item, index) => (
+                          <View key={index} style={styles.unitSection}>
+                            {index > 0 ? <Divider style={styles.divider} /> : null}
+
+                            {/* Unit Input */}
+                            <View>
+                              {values.units.length > 1 ? (
+                                <TouchableOpacity
+                                  style={styles.removeUnit}
+                                  onPress={() => removeUnit(index)}>
+                                  <Text
+                                    appearance={'hint'}
+                                    category={'c1'}
+                                    style={styles.removeUnitText}
+                                    status="info">
+                                    Remove Unit
+                                  </Text>
+                                </TouchableOpacity>
+                              ) : null}
+                              <Input
+                                label="Unit"
+                                placeholder="# / Name"
+                                value={item.unit}
+                                onChangeText={handleChange(`units[${index}].unit`)}
+                                autoCorrect={false}
+                                caption={
+                                  errors.units &&
+                                  touched.units &&
+                                  (errors.units[index] as any)?.unit
+                                    ? (errors.units[index] as any).unit
+                                    : undefined
+                                }
+                                status={
+                                  errors.units &&
+                                  touched.units &&
+                                  (errors.units[index] as any)?.unit
+                                    ? 'danger'
+                                    : 'basic'
+                                }
+                              />
+                            </View>
+
+                            <Row style={[styles.input, styles.unitRow]}>
+                              <Select
+                                label="Beds"
+                                item={item.bedrooms}
+                                items={bedValues}
+                                onItemChange={(item) => {
+                                  setFieldValue(`units[${index}].bedrooms`, item);
+                                }}
+                                isNullable={false}
+                                style={styles.smallSelect}
+                              />
+                              <Select
+                                label="Baths"
+                                item={item.bathrooms}
+                                items={bathValues}
+                                onItemChange={(item) => {
+                                  setFieldValue(`units[${index}].bathrooms`, item);
+                                }}
+                                isNullable={false}
+                                style={styles.smallSelect}
+                              />
+                            </Row>
+                          </View>
+                        ))}
+                      </>
+                    )}
+                    <Button onPress={() => handleSubmit()} style={styles.button}>
+                      Add My Property
+                    </Button>
                   </View>
                 );
               }}
@@ -161,6 +282,36 @@ const styles = StyleSheet.create({
   input: {
     marginTop: 15,
   },
+  unitRow: { justifyContent: 'space-between' },
+  smallSelect: { width: '45%' },
+  unitSection: {
+    marginVertical: 20,
+  },
+  addUnit: {
+    flexDirection: 'row',
+    marginTop: 10,
+    paddingVertical: 10,
+    paddingRight: 10,
+  },
+  addUnitText: { fontWeight: 'bold', marginLeft: 5 },
+  removeUnit: {
+    position: 'absolute',
+    right: 5,
+    zIndex: 10,
+    paddingBottom: 5,
+  },
+  removeUnitText: {
+    fontWeight: 'bold',
+  },
+  divider: {
+    backgroundColor: theme['color-gray'],
+    marginBottom: 30,
+    width: '95%',
+    alignSelf: 'center',
+  },
+  button: {
+    marginTop: 20,
+  },
 });
 
 const propertyTypes: PickerItem[] = [
@@ -173,3 +324,94 @@ const propertyTypes: PickerItem[] = [
     value: 'Mobile Home / Manufactured Home',
   },
 ];
+
+const bedValues: PickerItem[] = [
+  { label: 'Studio', value: 0 },
+  { label: '1.0', value: 1 },
+  { label: '2.0', value: 2 },
+  { label: '3.0', value: 3 },
+  { label: '4.0', value: 4 },
+  { label: '5.0', value: 5 },
+  { label: '6.0', value: 6 },
+];
+
+const bathValues: PickerItem[] = [
+  { label: '0.5', value: 0.5 },
+  { label: '1.0', value: 1 },
+  { label: '1.5', value: 1.5 },
+  { label: '2.0', value: 2 },
+  { label: '2.5', value: 2.5 },
+  { label: '3.0', value: 3 },
+  { label: '3.5', value: 3.5 },
+  { label: '4.0', value: 4 },
+  { label: '4.5', value: 4.5 },
+  { label: '5.0', value: 5 },
+  { label: '5.5', value: 5.5 },
+  { label: '6.0', value: 6 },
+  { label: '6.5', value: 6.5 },
+];
+
+const initialValues = {
+  unitType: 'single',
+  street: '',
+  city: '',
+  state: '',
+  zip: '',
+  lat: '',
+  lng: '',
+  propertyType: propertyTypes[0],
+  unit: {
+    bedrooms: bedValues[0],
+    bathrooms: bathValues[0],
+  },
+  units: [
+    {
+      unit: '',
+      bedrooms: bedValues[0],
+      bathrooms: bathValues[0],
+    },
+  ],
+};
+
+const validationSchema = yup.object().shape({
+  unitType: yup.string().required('Required'),
+  street: yup.string().required('Required'),
+  city: yup.string().required('Required'),
+  state: yup.string().required('Required'),
+  zip: yup.string().required('Required'),
+  lat: yup.string().required('Required'),
+  lng: yup.string().required('Required'),
+  propertyType: yup.object().shape({
+    label: yup.string().required('Required'),
+    value: yup.string().required('Required'),
+  }),
+  unit: yup.object().when('unitType', {
+    is: 'single',
+    then: yup.object().shape({
+      bedrooms: yup.object().shape({
+        label: yup.string().required('Required'),
+        value: yup.string().required('Required'),
+      }),
+      bathrooms: yup.object().shape({
+        label: yup.string().required('Required'),
+        value: yup.string().required('Required'),
+      }),
+    }),
+  }),
+  units: yup.array().when('unitType', {
+    is: 'multiple',
+    then: yup.array(
+      yup.object().shape({
+        unit: yup.string().required('Required'),
+        bedrooms: yup.object().shape({
+          label: yup.string().required('Required'),
+          value: yup.string().required('Required'),
+        }),
+        bathrooms: yup.object().shape({
+          label: yup.string().required('Required'),
+          value: yup.string().required('Required'),
+        }),
+      })
+    ),
+  }),
+});
