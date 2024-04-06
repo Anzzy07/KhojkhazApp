@@ -35,7 +35,9 @@ export const ResetPasswordScreen = ({ route }: { route: { params: { token: strin
         navigation.navigate('SignIn');
       },
       onError(error: any) {
-        if (error.response.status === 401) return alert('Invalid or Expired Tokem');
+        if (error.response.status === 401) return alert('Invalid or Expired Token');
+
+        alert('Unable to reset password.');
       },
     }
   );
