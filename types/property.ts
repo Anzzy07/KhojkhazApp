@@ -4,7 +4,7 @@ import { Pet } from './pet';
 import { Score } from './score';
 
 export type Property = {
-  id: number;
+  ID: number;
   images: string[];
   rentLow: number;
   rentHigh: number;
@@ -27,4 +27,21 @@ export type Property = {
   features?: string[];
   apartments?: Apartment[];
   scores?: Score[];
+};
+
+export type CreateProperty = {
+  unitType: string;
+  propertyType: string;
+  street: string;
+  city: string;
+  state: string;
+  zip: number;
+  lat: number;
+  lng: number;
+  managerID: number;
+  apartments: {
+    unit?: string;
+    bedrooms: number;
+    bathrooms: number;
+  }[];
 };

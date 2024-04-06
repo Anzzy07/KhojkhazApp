@@ -9,6 +9,7 @@ import { ResetPasswordScreen } from 'screens/ResetPasswordScreen';
 import { PropertyDetailsScreen } from 'screens/PropertyDetailsScreen';
 import { MessageScreen } from 'screens/MessageScreen';
 import { AddPropertyScreen } from 'screens/AddPropertyScreen';
+import { EditPropertyScreen } from 'screens/EditPropertyScreen';
 
 export type TabNavigatorParamList = {
   Search: undefined | SearchScreenParams;
@@ -29,6 +30,7 @@ export type RootStackParamList = {
   PropertyDetails: { propertyID: number };
   Message: { propertyID: number; tour?: boolean };
   AddProperty: { propertyID: number } | undefined;
+  EditProperty: { propertyID: number };
 };
 
 export type SearchScreenParams = {
@@ -77,6 +79,11 @@ export default function RootStack() {
           <Stack.Screen
             name="AddProperty"
             component={AddPropertyScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="EditProperty"
+            component={EditPropertyScreen}
             options={{ headerShown: false }}
           />
         </Stack.Group>
