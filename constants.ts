@@ -34,4 +34,6 @@ export const endpoints = {
   resetPassword: userEndpoint + '/resetpassword',
   createProperty: propertyEndpoint + '/create',
   getPropertyByID: propertyEndpoint + '/',
+  getPropertiesByUserID: propertyEndpoint + '/userid/',
+  deleteProperty: propertyEndpoint + '/',
 };
