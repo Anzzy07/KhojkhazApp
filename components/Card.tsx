@@ -1,7 +1,15 @@
-import { Pressable, ViewStyle, StyleSheet, TouchableOpacity, Dimensions, View } from 'react-native';
+import {
+  Pressable,
+  ViewStyle,
+  StyleSheet,
+  TouchableOpacity,
+  Dimensions,
+  View,
+  Modal,
+} from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useState } from 'react';
-import { Button, Modal } from '@ui-kitten/components';
+import { Button } from '@ui-kitten/components';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from 'navigation';
 import { useNavigation } from '@react-navigation/native';
@@ -18,13 +26,13 @@ import { endpoints } from '../constants';
 export const Card = ({
   property,
   onPress,
-  style,
   myProperty,
+  style,
 }: {
   property: Property;
   onPress?: () => void;
-  style?: ViewStyle;
   myProperty?: boolean;
+  style?: ViewStyle;
 }) => {
   const queryClient = useQueryClient();
   const [showModal, setShowModal] = useState(false);
@@ -69,7 +77,7 @@ export const Card = ({
   };
 
   return (
-    <Pressable onPress={onPress} style={[styles.container, style]}>
+    <Pressable onPress={onPress} style={[styles.container, styles.boxShadow, style]}>
       <ImageCarousel onImagePress={onPress} images={property.images} chevronsShown />
       <CardInformation property={property} myProperty={myProperty} />
 
@@ -82,13 +90,11 @@ export const Card = ({
           />
         </TouchableOpacity>
       ) : null}
-
-      <Modal visible={showModal} backdropStyle={styles.backdrop} onBackdropPress={closeModal}>
-        <View style={[styles.modal, styles.boxShadow]}>
+      <Modal visible={showModal}>
+        <View style={styles.modal}>
           <Button status={'info'} appearance="ghost" onPress={handleEditProperty}>
             Edit Property
           </Button>
-
           <Button status={'danger'} appearance="ghost" onPress={handleDeleteProperty}>
             Delete Property
           </Button>
