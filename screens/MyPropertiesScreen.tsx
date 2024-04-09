@@ -28,7 +28,10 @@ export const MyPropertiesScreen = () => {
   return (
     <Screen>
       {properties.data?.data && properties.data?.data.length > 0 ? (
-        <FlatList data={properties.data.data} renderItem={({ item }) => <Card property={item} />} />
+        <FlatList
+          data={properties.data.data}
+          renderItem={({ item }) => <Card property={item} myProperty />}
+        />
       ) : (
         <Text>My Property Screen</Text>
       )}

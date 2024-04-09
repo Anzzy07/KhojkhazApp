@@ -1,5 +1,5 @@
 import { View, StyleSheet } from 'react-native';
-import { Text, Button } from '@ui-kitten/components';
+import { Text, Button, Divider } from '@ui-kitten/components';
 
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { theme } from '../theme';
@@ -9,11 +9,20 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from 'navigation';
 import { useNavigation } from '@react-navigation/native';
 import { callPhoneNumber } from 'utils/callPhoneNumber';
+import { MyPropertiesScreen } from 'screens/MyPropertiesScreen';
+import { getStateAbbreviation } from 'utils/getStateAbbreviation';
 
-export const CardInformation = ({ property }: { property: Property }) => {
+export const CardInformation = ({
+  property,
+  myProperty,
+}: {
+  property: Property;
+  myProperty?: boolean;
+}) => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
-  return (
-    <View style={styles.informationContainer}>
+
+  const DefaultInfo = () => (
+    <>
       {property?.rentLow && property?.rentHigh && (
         <Row style={styles.rowJustification}>
           <Text category={'s1'}>
@@ -52,19 +61,56 @@ export const CardInformation = ({ property }: { property: Property }) => {
             {
               borderColor: theme['color-primary-500'],
             },
-            styles.Button,
+            styles.button,
           ]}
           size="small"
           onPress={() => navigation.navigate('Message', { propertyID: property.ID })}>
           Email
         </Button>
         <Button
-          style={styles.Button}
+          style={styles.button}
           size="small"
           onPress={() => callPhoneNumber(property.phoneNumber)}>
           Call
         </Button>
       </Row>
+    </>
+  );
+
+  const MyPropertyInfo = () => (
+    <>
+      <Text category={'s1'}>
+        {property?.name
+          ? property.name
+          : `${property.street}, ${property.city}, ${getStateAbbreviation(
+              property.state
+            )} ${property.zip}`}
+      </Text>
+      <Row style={[styles.rowAlign, styles.defaultMarginTop]}>
+        {property?.apartments && property.apartments.length > 0 ? (
+          <Text category={'c1'}>
+            {property.apartments.length} {property.apartments.length > 1 ? 'Units' : 'Unit'}
+          </Text>
+        ) : null}
+        <Button appearance={'ghost'} status="info" size={'small'}>
+          Manage Units
+        </Button>
+      </Row>
+
+      <Divider style={styles.divider} />
+
+      <Row style={[styles.defaultMarginTop, styles.rowJustification, styles.rowAlign]}>
+        <Text category={'s2'}>Listing: {property?.onMarket ? 'On Market' : 'Off Market'}</Text>
+        <Button size={'small'} appearance="ghost" status={'info'}>
+          {property?.onMarket ? 'Deactivate' : 'Reactivate'}
+        </Button>
+      </Row>
+    </>
+  );
+
+  return (
+    <View style={styles.informationContainer}>
+      {myProperty ? <MyPropertyInfo /> : <DefaultInfo />}
     </View>
   );
 };
@@ -74,17 +120,26 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 5,
     borderWidth: 1,
-    borderColor: '#d3d3d3',
+    borderColor: theme['color-gray'],
     borderBottomLeftRadius: 5,
     borderBottomRightRadius: 5,
   },
   defaultMarginTop: {
     marginTop: 5,
   },
+  divider: {
+    backgroundColor: theme['color-gray'],
+  },
+  rowAlign: { alignItems: 'center' },
   rowJustification: {
     justifyContent: 'space-between',
   },
-  Button: {
+  button: {
     width: '49%',
+  },
+  heartContainer: {
+    paddingHorizontal: 10,
+    paddingTop: 10,
+    paddingBottom: 5,
   },
 });
