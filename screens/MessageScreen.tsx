@@ -4,8 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import * as yup from 'yup';
 import { Formik } from 'formik';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import DateTimePicker from '@react-native-community/datetimepicker';
-
+import DateTimePicker from 'react-native-modal-datetime-picker';
 import { Screen } from 'components/Screen';
 import { ModalHeader } from 'components/ModalHeader';
 import { getStateAbbreviation } from 'utils/getStateAbbreviation';
@@ -130,19 +129,17 @@ export const MessageScreen = ({
                   onPress={() => setFieldValue('showCalender', true)}
                 />
 
-                {values.showCalendar && (
-                  <DateTimePicker
-                    value={values.date}
-                    mode="date"
-                    onChange={(event: any, selectedDate?: Date) => {
-                      if (selectedDate) {
-                        setFieldValue('showCalender', false);
-                        setFieldValue('date', selectedDate);
-                      }
-                    }}
-                  />
-                )}
-
+                <DateTimePicker
+                  isVisible={values.showCalendar}
+                  mode="date"
+                  onConfirm={(selectedDate: Date) => {
+                    if (selectedDate) {
+                      setFieldValue('showCalendar', false);
+                      setFieldValue('date', selectedDate);
+                    }
+                  }}
+                  onCancel={() => setFieldValue('showCalendar', false)}
+                />
                 <Input
                   style={styles.input}
                   value={values.message}

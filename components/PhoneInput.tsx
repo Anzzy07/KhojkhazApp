@@ -35,7 +35,7 @@ export const PhoneInput = ({
         ref={phoneRef}
         onChangeText={onChangeText}
         value={phoneNumber}
-        defaultCode={'NP'}
+        defaultCode={countryCode ? (countryCode as any) : 'NP'}
         containerStyle={[
           {
             borderColor: error ? theme['color-danger-500'] : borderColor,
@@ -64,7 +64,7 @@ export const PhoneInput = ({
 
       {borderColor === theme['color-danger-500'] || error ? (
         <Text category="c1" style={styles.errorText}>
-          Invalid Phone Number
+          {error ? error : 'Invalid Phone Number'}
         </Text>
       ) : null}
     </View>

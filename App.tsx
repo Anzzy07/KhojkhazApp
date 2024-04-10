@@ -7,13 +7,15 @@ import { useState, useEffect } from 'react';
 import * as eva from '@eva-design/eva';
 import { ApplicationProvider, Layout, Text } from '@ui-kitten/components';
 import { theme } from '../khojkhaz/theme';
-import { AuthContext } from 'context';
+import { AuthContext, LoadingContext } from 'context';
 import { User } from 'types/user';
 import * as SecureStore from 'expo-secure-store';
 
+const queryClient = new QueryClient();
+
 export default function App() {
-  const queryClient = new QueryClient();
   const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     async function getUser() {
@@ -24,15 +26,17 @@ export default function App() {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, setUser }}>
-      <QueryClientProvider client={queryClient}>
-        <ApplicationProvider {...eva} theme={theme}>
-          <SafeAreaProvider>
-            <RootStack />
-            <StatusBar />
-          </SafeAreaProvider>
-        </ApplicationProvider>
-      </QueryClientProvider>
-    </AuthContext.Provider>
+    <LoadingContext.Provider value={{ loading, setLoading }}>
+      <AuthContext.Provider value={{ user, setUser }}>
+        <QueryClientProvider client={queryClient}>
+          <ApplicationProvider {...eva} theme={theme}>
+            <SafeAreaProvider>
+              <RootStack />
+              <StatusBar />
+            </SafeAreaProvider>
+          </ApplicationProvider>
+        </QueryClientProvider>
+      </AuthContext.Provider>
+    </LoadingContext.Provider>
   );
 }

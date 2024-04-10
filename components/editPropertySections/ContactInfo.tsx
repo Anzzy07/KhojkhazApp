@@ -86,6 +86,9 @@ export const ContactInfo = ({
         phoneNumber={phoneNumber}
         style={styles.input}
         phoneRef={phoneRef}
+        error={touched.phoneNumber && errors.phoneNumber ? errors.phoneNumber : undefined}
+        countryCode={countryCode}
+        onBlur={() => setFieldTouched('phoneNumber')}
       />
 
       <Divider style={[styles.divider, styles.largeMarginTop]} />

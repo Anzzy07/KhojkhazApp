@@ -8,3 +8,11 @@ export const AuthContext = createContext<{
   user: null,
   setUser: (user: User | null) => {},
 });
+
+export const LoadingContext = createContext<{
+  loading: boolean;
+  setLoading: (loading: boolean) => void;
+}>({
+  loading: false,
+  setLoading: (loading: boolean) => {},
+});

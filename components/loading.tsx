@@ -1,7 +1,6 @@
 import { Dimensions, StyleSheet, View } from 'react-native';
 import LottieView from 'lottie-react-native';
 import { useRef } from 'react';
-import { Screen } from './Screen';
 
 export const Loading = () => {
   const animation = useRef<LottieView | null>(null);

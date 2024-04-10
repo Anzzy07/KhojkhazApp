@@ -1,7 +1,7 @@
 import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import { Input, Toggle, Text, Divider } from '@ui-kitten/components';
 import { FormikErrors, FormikTouched } from 'formik';
-import DateTimePicker from '@react-native-community/datetimepicker';
+import DateTimePicker from 'react-native-modal-datetime-picker';
 import { MaterialIcons } from '@expo/vector-icons';
 
 import { Row } from '../Row';
@@ -251,18 +251,17 @@ export const UnitsInput = ({
                 value={i.availableOn.toDateString()}
                 label={'Available On'}
               />
-              {i.showCalendar && (
-                <DateTimePicker
-                  value={i.availableOn}
-                  mode="date"
-                  onChange={(event: any, selectedDate?: Date) => {
-                    if (selectedDate) {
-                      setFieldValue(`apartments[${index}].showCalender`, false);
-                      setFieldValue(`apartments[${index}].availableOn`, selectedDate);
-                    }
-                  }}
-                />
-              )}
+              <DateTimePicker
+                isVisible={i.showCalendar}
+                mode="date"
+                onConfirm={(selectedDate: Date) => {
+                  if (selectedDate) {
+                    setFieldValue(`apartments[${index}].availableOn`, selectedDate);
+                    setFieldValue(`apartments[${index}].showCalendar`, false);
+                  }
+                }}
+                onCancel={() => setFieldValue(`apartments[${index}].showCalendar`, false)}
+              />
             </Row>
             <Divider style={styles.divider} />
             <TouchableOpacity onPress={() => handleShowAlternateScreen(index, PHOTOS_STR)}>

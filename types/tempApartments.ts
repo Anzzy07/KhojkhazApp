@@ -1,6 +1,7 @@
 import { PickerItem } from 'react-native-woodpicker/dist/types';
 
 export type TempApartment = {
+  ID?: number;
   unit: string;
   bedrooms: PickerItem;
   bathrooms: PickerItem;

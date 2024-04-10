@@ -7,8 +7,8 @@ import { PickerItem } from 'react-native-woodpicker';
 import { MaterialIcons } from '@expo/vector-icons';
 import * as yup from 'yup';
 import axios from 'axios';
-import { useMutation } from 'react-query';
-import { useNavigation } from '@react-navigation/native';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { StackActions, useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from 'navigation';
 
@@ -32,6 +32,7 @@ export const AddPropertySection = () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const [searchingLocation, setSearchingLocation] = useState(false);
   const [suggestions, setSuggestions] = useState<SearchLocation[]>([]);
+  const queryClient = useQueryClient();
 
   const createProperty = useMutation(
     'property',
@@ -43,7 +44,8 @@ export const AddPropertySection = () => {
         alert('Unable to create Property');
       },
       onSuccess(data: { data: Property }) {
-        navigation.navigate('EditProperty', { propertyID: data.data.ID });
+        queryClient.invalidateQueries('myproperties');
+        navigation.dispatch(StackActions.replace('EditProperty', { propertyID: data.data.ID }));
       },
     }
   );
@@ -85,18 +87,23 @@ export const AddPropertySection = () => {
         apartments: [],
       };
 
+      const availableOn = new Date();
       if (values.unitType === 'multiple') {
         for (let i of values.units) {
           obj.apartments.push({
             unit: i.unit,
             bathrooms: i.bathrooms.value,
             bedrooms: i.bedrooms.value,
+            active: true,
+            availableOn,
           });
         }
       } else {
         obj.apartments.push({
           bathrooms: values.unit.bathrooms.value,
           bedrooms: values.unit.bedrooms.value,
+          active: true,
+          availableOn,
         });
       }
 
