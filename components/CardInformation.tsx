@@ -21,6 +21,14 @@ export const CardInformation = ({
 }) => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
+  const manageUnitsNavigation = () =>
+    navigation.navigate('ManageUnits', { propertyID: property.ID });
+
+  const emailNavigation = () => navigation.navigate('Message', { propertyID: property.ID });
+
+  const editPropertyNavigation = () =>
+    navigation.navigate('EditProperty', { propertyID: property.ID });
+
   const DefaultInfo = () => (
     <>
       {property?.rentLow && property?.rentHigh && (
@@ -64,7 +72,7 @@ export const CardInformation = ({
             styles.button,
           ]}
           size="small"
-          onPress={() => navigation.navigate('Message', { propertyID: property.ID })}>
+          onPress={emailNavigation}>
           Email
         </Button>
         <Button
@@ -92,7 +100,7 @@ export const CardInformation = ({
             {property.apartments.length} {property.apartments.length > 1 ? 'Units' : 'Unit'}
           </Text>
         ) : null}
-        <Button appearance={'ghost'} status="info" size={'small'}>
+        <Button appearance={'ghost'} status="info" size={'small'} onPress={manageUnitsNavigation}>
           Manage Units
         </Button>
       </Row>
@@ -101,7 +109,7 @@ export const CardInformation = ({
 
       <Row style={[styles.defaultMarginTop, styles.rowJustification, styles.rowAlign]}>
         <Text category={'s2'}>Listing: {property?.onMarket ? 'On Market' : 'Off Market'}</Text>
-        <Button size={'small'} appearance="ghost" status={'info'}>
+        <Button size={'small'} appearance="ghost" status={'info'} onPress={editPropertyNavigation}>
           {property?.onMarket ? 'Deactivate' : 'Reactivate'}
         </Button>
       </Row>

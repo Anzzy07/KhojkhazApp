@@ -288,10 +288,11 @@ export const EditPropertyScreen = ({ route }: { route: { params: { propertyID: n
                     appearance={'ghost'}
                     style={[styles.saveButton]}
                     onPress={() => {
-                      setFieldValue('onMarket', true);
+                      if (propertyData?.onMarket) setFieldValue('onMarket', false);
+                      else setFieldValue('onMarket', true);
                       handleSubmit();
                     }}>
-                    Publish Listing
+                    {propertyData?.onMarket ? 'Unpublish Listing' : 'Publish Listing'}
                   </Button>
                 </>
               );

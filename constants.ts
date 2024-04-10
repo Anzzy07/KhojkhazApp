@@ -19,11 +19,12 @@ export const HEADERHEIGHT = Platform.OS === 'ios' ? iosHeight : androidHeight;
 const serverUrl = 'http://192.168.2.98:4000/api';
 const location = '/location';
 const user = '/user';
-const manager = '/manager';
+const apartment = '/apartment';
 const property = '/property';
 const locationEndpoint = serverUrl + location;
 const userEndpoint = serverUrl + user;
 const propertyEndpoint = serverUrl + property;
+const apartmentEndpoint = serverUrl + apartment;
 
 export const endpoints = {
   autoComplete: locationEndpoint + '/autocomplete',
@@ -40,4 +41,6 @@ export const endpoints = {
   getPropertiesByUserID: propertyEndpoint + '/userid/',
   deleteProperty: propertyEndpoint + '/',
   updateProperty: propertyEndpoint + '/update/',
+  getApartmentsByPropertyID: apartmentEndpoint + '/property/',
+  updateApartments: apartmentEndpoint + '/property/',
 };
