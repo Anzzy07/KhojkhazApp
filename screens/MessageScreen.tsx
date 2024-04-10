@@ -14,7 +14,7 @@ import { useAuth } from 'hooks/useAuth';
 import { properties } from 'data/properties';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from 'navigation';
-import { useState } from 'react';
+import { PressableInput } from 'components/PressableInput';
 
 export const MessageScreen = ({
   route,
@@ -25,8 +25,6 @@ export const MessageScreen = ({
   const { tour, propertyID } = route.params;
   const index = properties.findIndex((i) => i.id === propertyID);
   const property = properties[index];
-  const [pickedDate, setPickedDate] = useState<Date>(new Date());
-  const [showCalender, setShowCalender] = useState(false);
   const { user } = useAuth();
 
   return (
@@ -55,8 +53,8 @@ export const MessageScreen = ({
             phoneNumber: '',
             email: user ? user.email : '',
             message: tour ? 'I would like to have a tour.' : '',
-            // date: new Date(),
-            // showCalendar: false,
+            date: new Date(),
+            showCalendar: false,
           }}
           validationSchema={yup.object().shape({
             firstName: yup.string().required('Required'),
@@ -64,8 +62,8 @@ export const MessageScreen = ({
             phoneNumber: yup.string(),
             email: yup.string().email().required('Required'),
             message: yup.string().required('Required'),
-            // date: yup.date().required('Required'),
-            // showCalendar: yup.bool(),
+            date: yup.date().required('Required'),
+            showCalendar: yup.bool(),
           })}
           onSubmit={(values) => {
             console.log('send values', values);
@@ -125,27 +123,25 @@ export const MessageScreen = ({
                   status={touched.email && errors.email ? 'danger' : 'basic'}
                 />
 
-                <View style={styles.input}>
-                  <Text style={styles.moveInLabel} category={'label'} appearance={'hint'}>
-                    Move In Date
-                  </Text>
-                  <Pressable onPress={() => setShowCalender(true)} style={styles.pickedDate}>
-                    <Text style={styles.pickedDateText}>{pickedDate?.toDateString()}</Text>
-                  </Pressable>
-                </View>
+                <PressableInput
+                  style={styles.input}
+                  label="Move In Date"
+                  value={values.date.toDateString()}
+                  onPress={() => setFieldValue('showCalender', true)}
+                />
 
-                {/* {showCalender && (
+                {values.showCalendar && (
                   <DateTimePicker
-                    value={pickedDate}
+                    value={values.date}
                     mode="date"
                     onChange={(event: any, selectedDate?: Date) => {
                       if (selectedDate) {
-                        setShowCalender(false);
-                        setPickedDate(selectedDate);
+                        setFieldValue('showCalender', false);
+                        setFieldValue('date', selectedDate);
                       }
                     }}
                   />
-                )}  */}
+                )}
 
                 <Input
                   style={styles.input}
