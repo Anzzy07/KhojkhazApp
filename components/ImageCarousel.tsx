@@ -3,6 +3,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { WIDTH } from '../constants';
 import { useState, useRef } from 'react';
 import { Text } from '@ui-kitten/components';
+import { theme } from 'theme';
 
 export const ImageCarousel = ({
   images,
@@ -10,11 +11,15 @@ export const ImageCarousel = ({
   chevronsShown,
   indexShown,
   imageStyle,
+  xShown,
+  onXpress,
 }: {
   images: string[];
   onImagePress?: () => void;
   chevronsShown?: boolean;
   indexShown?: boolean;
+  xShown?: boolean;
+  onXpress: (index: number, flatListRef?: React.MutableRefObject<FlatList<any> | null>) => void;
   imageStyle?: ImageStyle;
 }) => {
   const flatListRef = useRef<FlatList | null>(null);
@@ -64,12 +69,21 @@ export const ImageCarousel = ({
           pagingEnabled
           viewabilityConfig={viewConfig}
           onViewableItemsChanged={onViewRef.current}
-          renderItem={({ item }) => (
+          renderItem={({ item, index }) => (
             <Pressable onPress={onImagePress}>
               <Image source={{ uri: item }} style={[styles.image, imageStyle]} />
+              {xShown && onXpress ? (
+                <MaterialCommunityIcons
+                  onPress={() => onXpress(index, flatListRef)}
+                  style={styles.x}
+                  name="close"
+                  color={theme['color-primary-500']}
+                  size={20}
+                />
+              ) : null}
             </Pressable>
           )}
-          keyExtractor={(item) => item}
+          keyExtractor={(item, index) => item + index}
         />
       ) : (
         <Pressable onPress={onImagePress}>

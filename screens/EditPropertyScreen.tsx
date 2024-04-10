@@ -7,6 +7,7 @@ import { Formik } from 'formik';
 import { PickerItem } from 'react-native-woodpicker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { MaterialIcons } from '@expo/vector-icons';
+import { useState } from 'react';
 
 import { Loading } from 'components/loading';
 import { Screen } from 'components/Screen';
@@ -18,11 +19,25 @@ import { bathValues } from 'constants/bathValues';
 import { Row } from 'components/Row';
 import { Select } from 'components/Select';
 import { PressableInput } from 'components/PressableInput';
+import { UnitPhotosPicker } from 'components/UnitPhotosPicker';
 
 export const EditPropertyScreen = ({ route }: { route: { params: { propertyID: number } } }) => {
   const property: UseQueryResult<{ data: Property }, unknown> = useQuery('property', () =>
     axios.get(endpoints.getPropertyByID + route.params.propertyID)
   );
+
+  const [showUnitPhotos, setShowUnitPhotos] = useState(false);
+  const [apartmentIndex, setApartmentIndex] = useState<number>(-1);
+
+  const handleShowUnitImage = (index: number) => {
+    setShowUnitPhotos(true);
+    setApartmentIndex(index);
+  };
+  const handleHideUnitImages = () => {
+    setShowUnitPhotos(false);
+    setApartmentIndex(-1);
+  };
+
   if (property.isFetching || property.isLoading) return <Loading />;
 
   let initialApartments: TempApartment[] = [];
@@ -49,9 +64,11 @@ export const EditPropertyScreen = ({ route }: { route: { params: { propertyID: n
   return (
     <KeyboardAwareScrollView bounces={false}>
       <Screen style={styles.container}>
-        <Text category="h5" style={styles.header}>
-          Basic Info
-        </Text>
+        {!showUnitPhotos && (
+          <Text category="h5" style={styles.header}>
+            Basic Info
+          </Text>
+        )}
         <View>
           <Formik
             initialValues={{
@@ -93,11 +110,21 @@ export const EditPropertyScreen = ({ route }: { route: { params: { propertyID: n
                 setFieldValue('apartments', newApartments);
               };
 
+              if (showUnitPhotos && apartmentIndex > -1)
+                return (
+                  <UnitPhotosPicker
+                    setImages={setFieldValue}
+                    images={values.apartments[apartmentIndex].images}
+                    field={`apartments[${apartmentIndex}].images`}
+                    cancel={handleHideUnitImages}
+                  />
+                );
+
               return (
                 <>
                   {values.apartments.map((i, index) => {
                     return (
-                      <View>
+                      <View key={i.unit + index}>
                         {values.apartments.length > 1 ? (
                           <>
                             {property.data?.data.apartments &&
@@ -283,7 +310,7 @@ export const EditPropertyScreen = ({ route }: { route: { params: { propertyID: n
                           )}
                         </Row>
                         <Divider style={styles.divider} />
-                        <TouchableOpacity onPress={() => console.log('upload photos')}>
+                        <TouchableOpacity onPress={() => handleShowUnitImage(index)}>
                           <Text status={'info'}>Property Photo</Text>
                         </TouchableOpacity>
                         <Divider style={styles.divider} />
