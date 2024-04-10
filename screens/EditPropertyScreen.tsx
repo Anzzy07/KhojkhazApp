@@ -21,6 +21,7 @@ import { Select } from 'components/Select';
 import { PressableInput } from 'components/PressableInput';
 import { UnitPhotosPicker } from 'components/UnitPhotosPicker';
 import { UnitAmenities } from 'components/UnitAmenities';
+import { UnitDescription } from 'components/UnitDescription';
 
 const photoStr = 'photos';
 const amenitiesStr = 'amenities';
@@ -135,6 +136,16 @@ export const EditPropertyScreen = ({ route }: { route: { params: { propertyID: n
                     setAmenities={setFieldValue}
                     amenities={values.apartments[apartmentIndex].amenities}
                     field={`apartments[${apartmentIndex}].amenities`}
+                    cancel={handleHideAlternateScreen}
+                  />
+                );
+
+              if (showAlternateScreen === descriptionStr && apartmentIndex > -1)
+                return (
+                  <UnitDescription
+                    setDescription={setFieldValue}
+                    description={values.apartments[apartmentIndex].description}
+                    field={`apartments[${apartmentIndex}].description`}
                     cancel={handleHideAlternateScreen}
                   />
                 );
