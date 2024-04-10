@@ -1,4 +1,4 @@
-import { FlatList, Pressable, Image, StyleSheet, ImageStyle, View } from 'react-native';
+import { FlatList, Pressable, Image, StyleSheet, ImageStyle, View, ViewStyle } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { WIDTH } from '../constants';
 import { useState, useRef } from 'react';
@@ -12,14 +12,18 @@ export const ImageCarousel = ({
   indexShown,
   imageStyle,
   xShown,
-  onXpress,
+  field,
+  style,
+  setImages,
 }: {
   images: string[];
   onImagePress?: () => void;
   chevronsShown?: boolean;
   indexShown?: boolean;
+  field?: string;
+  setImages?: (field: string, values: any) => void;
   xShown?: boolean;
-  onXpress: (index: number, flatListRef?: React.MutableRefObject<FlatList<any> | null>) => void;
+  style?: ViewStyle[] | ViewStyle;
   imageStyle?: ImageStyle;
 }) => {
   const flatListRef = useRef<FlatList | null>(null);
@@ -30,6 +34,17 @@ export const ImageCarousel = ({
       setActiveIndex(changed[0].index);
     }
   });
+
+  const onXPress = (index: number) => {
+    if (field && setImages) {
+      const newImages = images.filter((i, idx) => index !== idx);
+      setImages(field, newImages);
+      // If we delete an image in the middle, the flatlist doesn't automatically move images past index forward
+      if (index !== 0 && index === images.length - 1 && flatListRef && flatListRef.current) {
+        flatListRef.current.scrollToIndex({ index: index - 1 });
+      }
+    }
+  };
 
   const handlePressLeft = () => {
     if (activeIndex === 0)
@@ -56,7 +71,7 @@ export const ImageCarousel = ({
   };
 
   return (
-    <>
+    <View style={style}>
       {images && images.length > 0 ? (
         <FlatList
           ref={(ref) => {
@@ -72,9 +87,9 @@ export const ImageCarousel = ({
           renderItem={({ item, index }) => (
             <Pressable onPress={onImagePress}>
               <Image source={{ uri: item }} style={[styles.image, imageStyle]} />
-              {xShown && onXpress ? (
+              {xShown ? (
                 <MaterialCommunityIcons
-                  onPress={() => onXpress(index, flatListRef)}
+                  onPress={() => onXPress(index)}
                   style={styles.x}
                   name="close"
                   color={theme['color-primary-500']}
@@ -112,7 +127,7 @@ export const ImageCarousel = ({
           </Text>
         </View>
       )}
-    </>
+    </View>
   );
 };
 

@@ -4,8 +4,7 @@ import { Button, Divider, Input, Text } from '@ui-kitten/components';
 import { ModalHeader } from './ModalHeader';
 import { Row } from './Row';
 import { theme } from '../theme';
-
-const maxChars = 1000;
+import { DescriptionInput } from './DescriptionInput';
 
 export const UnitDescription = ({
   field,
@@ -18,11 +17,6 @@ export const UnitDescription = ({
   setDescription: (field: string, values: any) => void;
   cancel?: () => void;
 }) => {
-  const handleChangeText = (text: string) => {
-    if (maxChars - text.length < 0) return;
-    setDescription(field, text);
-  };
-
   const handleClearPressed = () => {
     setDescription(field, '');
   };
@@ -31,18 +25,13 @@ export const UnitDescription = ({
     <View>
       <ModalHeader xShown text="Property Description" onPress={cancel ? cancel : undefined} />
       <View style={styles.container}>
-        <Input
-          multiline
-          autoFocus
+        <DescriptionInput
+          field={field}
+          setDescription={setDescription}
           value={description}
-          numberOfLines={8}
-          textAlignVertical="top"
-          onChangeText={handleChangeText}
-          placeholder="What's great about this property?"
+          autoFocus
         />
-        <Text appearance={'hint'} category="c1">
-          {maxChars - description.length} Characters Remaining
-        </Text>
+
         <Divider style={[styles.divider, styles.defaultMarginTop]} />
 
         <Row style={[styles.row, styles.defaultMarginTop]}>
