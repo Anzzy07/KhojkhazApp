@@ -23,7 +23,7 @@ export const MessageScreen = ({
 }) => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const { tour, propertyID } = route.params;
-  const index = properties.findIndex((i) => i.id === propertyID);
+  const index = properties.findIndex((i) => i.ID === propertyID);
   const property = properties[index];
   const { user } = useAuth();
 

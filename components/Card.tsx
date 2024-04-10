@@ -90,13 +90,16 @@ export const Card = ({
           />
         </TouchableOpacity>
       ) : null}
-      <Modal visible={showModal}>
+      <Modal visible={showModal} transparent>
         <View style={styles.modal}>
           <Button status={'info'} appearance="ghost" onPress={handleEditProperty}>
             Edit Property
           </Button>
           <Button status={'danger'} appearance="ghost" onPress={handleDeleteProperty}>
             Delete Property
+          </Button>
+          <Button appearance="ghost" onPress={closeModal}>
+            Cancel
           </Button>
         </View>
       </Modal>

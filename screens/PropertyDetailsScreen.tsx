@@ -14,13 +14,13 @@ import { LocationSection } from 'components/propertyDetailsSections/LocationSect
 import { ReviewSection } from 'components/propertyDetailsSections/ReviewSection';
 
 export const PropertyDetailsScreen = ({ route }: { route: { params: { propertyID: number } } }) => {
-  const index = properties.findIndex((i) => i.id === route.params.propertyID);
+  const index = properties.findIndex((i) => i.ID === route.params.propertyID);
   const property = properties[index];
   return (
     <Screen>
       <FlatList
         data={[property]}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={(item) => item.ID.toString()}
         renderItem={({ item }) => (
           <>
             {item.images ? (
