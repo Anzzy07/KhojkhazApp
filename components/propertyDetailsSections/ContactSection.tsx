@@ -11,16 +11,14 @@ import { openURL } from 'utils/openURL';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from 'navigation';
 
-const formatPhoneNumber = (str: string) => {
+const formatPhoneNumber = (str: string, callingCode: string) => {
   let cleaned = ('' + str).replace(/\D/g, '');
   let match = cleaned.match(/^(1|)?(\d{3})(\d{3})(\d{4})$/);
   if (match) {
-    let initCode = match[1] ? '+1' : '';
-    return [initCode, '(', match[2], ') ', match[3], '-', match[4]].join('');
+    return [`+${callingCode} `, '(', match[2], ') ', match[3], '-', match[4]].join('');
   }
   return 'Give Us A Call';
 };
-
 export const ContactSection = ({ property }: { property: Property }) => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
@@ -34,7 +32,7 @@ export const ContactSection = ({ property }: { property: Property }) => {
           <MaterialIcons name="smartphone" color={theme['color-info-500']} size={16} />
 
           <Text category={'c1'} status={'info'} style={styles.rowText}>
-            {formatPhoneNumber(property.phoneNumber)}
+            {formatPhoneNumber(property.phoneNumber, property.callingCode)}
           </Text>
         </Row>
       </TouchableOpacity>

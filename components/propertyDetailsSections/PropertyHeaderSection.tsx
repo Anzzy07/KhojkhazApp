@@ -30,9 +30,11 @@ export const PropertyHeaderSection = ({ property }: { property: Property }) => {
 
   return (
     <>
-      <Text category={'h5'} style={styles.defaultMarginTop}>
-        {property.name}
-      </Text>
+      {property.name ? (
+        <Text category={'h5'} style={styles.defaultMarginTop}>
+          {property.name}
+        </Text>
+      ) : null}
       <Row style={styles.containerRow}>
         <View>
           <Text category={'c1'}>{property.street}</Text>

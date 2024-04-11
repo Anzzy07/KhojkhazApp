@@ -7,43 +7,49 @@ import { Row } from 'components/Row';
 import { BulletedList } from 'components/BulletedList';
 
 export const AmentitiesSection = ({ property }: { property: Property }) => {
+  const apartmentsAmenities = [];
+  const amenityExists = new Map<string, boolean>();
+  for (let apartment of property.apartments) {
+    if (apartment?.amenities) {
+      for (let amenity of apartment.amenities) {
+        if (!amenityExists.get(amenity)) {
+          apartmentsAmenities.push(amenity);
+          amenityExists.set(amenity, true);
+        }
+      }
+    }
+  }
   return (
     <>
-      <Text category={'h5'} style={styles.defaultMarginVertical}>
-        Amenities
-      </Text>
-      <Row style={styles.row}>
-        <MaterialCommunityIcons name="google-circles-communities" color={'black'} size={24} />
-        <Text style={styles.text} category={'h6'}>
-          Community Amenities
-        </Text>
-      </Row>
-      <BulletedList data={['Contrlled Access']} heading="Services" />
-      <BulletedList data={['Clubhouse', 'Lounge']} heading="Interior" />
-      <BulletedList data={['Picnic Area', 'Gated', 'Grill']} heading="Outdoor" />
-      <BulletedList
-        data={['Fitness Center', 'Pool', 'Spas', 'Cycling']}
-        heading="Fitness & Recreation"
-      />
-      <Row style={styles.row}>
-        <MaterialCommunityIcons name="toy-brick-outline" color={'black'} size={24} />
-        <Text style={styles.text} category={'h6'}>
-          Property Features
-        </Text>
-      </Row>
-      <BulletedList
-        data={['Freeze', 'Dustbin', 'Oven', 'Kitchen', 'Microwave']}
-        heading="Kitchen"
-      />
-      <BulletedList
-        data={['Bay Window', 'Crown Handling', 'Closet', 'Tables']}
-        heading="Living Room"
-      />
-      <BulletedList data={['Balcony']} heading="Outdoor Space" />
+      {property.amenities && property.amenities.length > 0 ? (
+        <>
+          <Text category={'h5'} style={styles.defaultMarginVertical}>
+            Amenities
+          </Text>
+          <Row style={styles.row}>
+            <MaterialCommunityIcons name="google-circles-communities" color={'black'} size={24} />
+            <Text style={styles.text} category={'h6'}>
+              Community Amenities
+            </Text>
+          </Row>
+          <BulletedList data={property.amenities} />
+        </>
+      ) : null}
+
+      {apartmentsAmenities.length > 0 ? (
+        <>
+          <Row style={styles.row}>
+            <MaterialCommunityIcons name="toy-brick-outline" color={'black'} size={24} />
+            <Text style={styles.text} category={'h6'}>
+              Apartment Features
+            </Text>
+          </Row>
+          <BulletedList data={apartmentsAmenities} />
+        </>
+      ) : null}
     </>
   );
 };
-
 const styles = StyleSheet.create({
   row: { alignItems: 'center', paddingVertical: 10 },
   text: { marginLeft: 10 },

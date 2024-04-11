@@ -15,17 +15,14 @@ export type Property = {
   city: string;
   state: string;
   zip: number;
-  tags: string[];
   lat: number;
   lng: number;
   countryCode: string;
   callingCode: string;
-  about: string;
   phoneNumber: string;
-  website: string;
+  website?: string;
   unitType: 'single' | 'multiple';
-  description: string;
-  pets: Pet[];
+  description?: string;
   stars: number;
   onMarket?: boolean;
   includedUtilities?: string[];
@@ -33,7 +30,6 @@ export type Property = {
   petsAllowed: string;
   laundryType: string;
   reviews?: Review[];
-  features?: string[];
   apartments: Apartment[];
   scores?: Score[];
   parkingFee?: number;

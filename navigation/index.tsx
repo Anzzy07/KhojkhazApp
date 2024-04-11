@@ -12,6 +12,7 @@ import { AddPropertyScreen } from 'screens/AddPropertyScreen';
 import { EditPropertyScreen } from 'screens/EditPropertyScreen';
 import { MyPropertiesScreen } from 'screens/MyPropertiesScreen';
 import { ManageUnitsScreen } from 'screens/ManageUnitsScreen';
+import { ReviewScreen } from 'screens/ReviewScreen';
 
 export type TabNavigatorParamList = {
   Search: undefined | SearchScreenParams;
@@ -35,6 +36,7 @@ export type RootStackParamList = {
   EditProperty: { propertyID: number };
   MyProperties: undefined;
   ManageUnits: { propertyID: number };
+  Review: { propertyID: number; propertyName: string };
 };
 
 export type SearchScreenParams = {
@@ -100,6 +102,7 @@ export default function RootStack() {
             component={ManageUnitsScreen}
             options={{ headerShown: false }}
           />
+          <Stack.Screen name="Review" component={ReviewScreen} options={{ headerShown: false }} />
         </Stack.Group>
       </Stack.Navigator>
     </NavigationContainer>

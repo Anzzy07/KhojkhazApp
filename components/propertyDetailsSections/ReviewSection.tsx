@@ -1,17 +1,22 @@
 import { FlatList, StyleSheet } from 'react-native';
 import { Text, Button } from '@ui-kitten/components';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList } from 'navigation';
+import { useNavigation } from '@react-navigation/native';
 
 import { Property } from 'types/property';
 import { OverallReviewScoreCard } from 'components/OverallReviewScoreCard';
 import { ReviewCard } from 'components/ReviewCard';
+import { getStateAbbreviation } from 'utils/getStateAbbreviation';
 
 export const ReviewSection = ({ property }: { property: Property }) => {
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   return (
     <>
       <Text category={'h5'} style={styles.defaultMarginVertical}>
         Reviews
       </Text>
-      {property.rentLow ? (
+      {property.reviews ? (
         <>
           <OverallReviewScoreCard
             numberOfReviews={property.reviews ? property.reviews.length : 0}
@@ -27,12 +32,21 @@ export const ReviewSection = ({ property }: { property: Property }) => {
             renderItem={({ item }) => <ReviewCard review={item} />}
           />
         </>
-      ) : null}
+      ) : (
+        <Text>No reviews yet. Be the first one to review this property.</Text>
+      )}
 
       <Button
-        onPress={() => console.log('Navigate to the review screen')}
+        onPress={() =>
+          navigation.navigate('Review', {
+            propertyID: property.ID,
+            propertyName: property?.name
+              ? property.name
+              : `${property.street}, ${getStateAbbreviation(property.state)}, ${property.zip}`,
+          })
+        }
         style={styles.defaultMarginVertical}>
-        Give a Review
+        Write a Review
       </Button>
     </>
   );

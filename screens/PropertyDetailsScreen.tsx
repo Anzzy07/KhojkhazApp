@@ -1,8 +1,10 @@
 import { StyleSheet, FlatList, View, Dimensions } from 'react-native';
 import { Screen } from 'components/Screen';
-import { Divider } from '@ui-kitten/components';
-import { properties } from 'data/properties';
+import { Divider, Text } from '@ui-kitten/components';
 import { ImageCarousel } from 'components/ImageCarousel';
+import { useQuery } from 'react-query';
+import axios from 'axios';
+
 import { theme } from 'theme';
 import { PropertyHeaderSection } from 'components/propertyDetailsSections/PropertyHeaderSection';
 import { PricingAndFloorPlanSection } from 'components/propertyDetailsSections/PricingAndFloorPlanSection';
@@ -12,14 +14,19 @@ import { AmentitiesSection } from 'components/propertyDetailsSections/AmenitiesS
 import { LeaseAndFeesSection } from '../components/propertyDetailsSections/LeaseAndFeesSection';
 import { LocationSection } from 'components/propertyDetailsSections/LocationSection';
 import { ReviewSection } from 'components/propertyDetailsSections/ReviewSection';
+import { endpoints } from '../constants';
 
 export const PropertyDetailsScreen = ({ route }: { route: { params: { propertyID: number } } }) => {
-  const index = properties.findIndex((i) => i.ID === route.params.propertyID);
-  const property = properties[index];
+  const property = useQuery('selectedproperty', () => {
+    return axios.get(`${endpoints.getPropertyByID}${route.params.propertyID}`);
+  });
+
+  if (!property.data?.data) return <Text>Unable to get property ...</Text>;
+
   return (
     <Screen>
       <FlatList
-        data={[property]}
+        data={[property.data.data]}
         keyExtractor={(item) => item.ID.toString()}
         renderItem={({ item }) => (
           <>

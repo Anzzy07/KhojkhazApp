@@ -21,10 +21,12 @@ const location = '/location';
 const user = '/user';
 const apartment = '/apartment';
 const property = '/property';
+const review = '/review';
 const locationEndpoint = serverUrl + location;
 const userEndpoint = serverUrl + user;
 const propertyEndpoint = serverUrl + property;
 const apartmentEndpoint = serverUrl + apartment;
+const reviewEndpoint = serverUrl + review;
 
 export const endpoints = {
   autoComplete: locationEndpoint + '/autocomplete',
@@ -39,8 +41,10 @@ export const endpoints = {
   createProperty: propertyEndpoint + '/create',
   getPropertyByID: propertyEndpoint + '/',
   getPropertiesByUserID: propertyEndpoint + '/userid/',
+  getPropertiesByBoundingBox: propertyEndpoint + '/search',
   deleteProperty: propertyEndpoint + '/',
   updateProperty: propertyEndpoint + '/update/',
   getApartmentsByPropertyID: apartmentEndpoint + '/property/',
   updateApartments: apartmentEndpoint + '/property/',
+  createReview: reviewEndpoint + '/property/',
 };
