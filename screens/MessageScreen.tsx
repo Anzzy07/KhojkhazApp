@@ -9,7 +9,7 @@ import { Screen } from 'components/Screen';
 import { ModalHeader } from 'components/ModalHeader';
 import { getStateAbbreviation } from 'utils/getStateAbbreviation';
 import { Row } from 'components/Row';
-import { useAuth } from 'hooks/useAuth';
+import { useUser } from 'hooks/useUser';
 import { properties } from 'data/properties';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from 'navigation';
@@ -24,7 +24,7 @@ export const MessageScreen = ({
   const { tour, propertyID } = route.params;
   const index = properties.findIndex((i) => i.ID === propertyID);
   const property = properties[index];
-  const { user } = useAuth();
+  const { user } = useUser();
 
   return (
     <KeyboardAwareScrollView bounces={false}>

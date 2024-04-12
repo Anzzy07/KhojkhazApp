@@ -4,7 +4,6 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { Screen } from 'components/Screen';
 import * as yup from 'yup';
 import { Formik } from 'formik';
-import * as AppleAuthentication from 'expo-apple-authentication';
 
 import { ModalHeader } from 'components/ModalHeader';
 import { GoogleButton } from 'components/GoogleButton';
@@ -15,95 +14,13 @@ import { PasswordInput } from 'components/PasswordInput';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from 'navigation';
 import { OrDivider } from 'components/OrDivider';
-import {
-  appleLoginOrRegister,
-  facebookLoginOrRegister,
-  googleLoginOrRegister,
-  loginUser,
-} from 'services/user';
+import { useUser } from 'hooks/useUser';
 import { useAuth } from 'hooks/useAuth';
-import { useMutation } from 'react-query';
-import { Loading } from 'components/loading';
-import * as Facebook from 'expo-auth-session/providers/facebook';
-import * as Google from 'expo-auth-session/providers/google';
-import { useEffect } from 'react';
 
 export const SignInScreen = () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
-  const { login } = useAuth();
-
-  const [_, googleResponse, googlePromptAsync] = Google.useAuthRequest({
-    expoClientId: '841113567422-4h0fi2te8ngedfi9unk4m1bbbmrjiun4.apps.googleusercontent.com',
-    iosClientId: '841113567422-ovi5t3grd0a5cereu56fqqp8phk6j2kg.apps.googleusercontent.com',
-    androidClientId: '841113567422-brvrdcgvb26s21ku994mqisiefe7hk27.apps.googleusercontent.com',
-    webClientId: 'GOOGLE_GUID.apps.googleusercontent.com',
-  });
-
-  // useEffect(() => {}, [googleResponse]);
-
-  const [___, ____, fbPromptAsync] = Facebook.useAuthRequest({
-    clientId: '229503536901618',
-    redirectUri: 'https://auth.expo.io/@anzel/khojkhaz',
-  });
-
-  const nativeLogin = useMutation(async (values: { email: string; password: string }) => {
-    const user = await loginUser(values.email, values.password);
-    if (user) {
-      login(user);
-      navigation.goBack();
-    }
-  });
-
-  const facebookLogin = useMutation(async () => {
-    const response = await fbPromptAsync();
-    if (response.type === 'success') {
-      const { access_token } = response.params;
-
-      const user = await facebookLoginOrRegister(access_token);
-      if (user) {
-        login(user);
-        navigation.goBack();
-      }
-    }
-  });
-
-  const googleLogin = useMutation(async () => {
-    const response = await googlePromptAsync();
-    if (response.type === 'success') {
-      const { access_token } = response.params;
-      console.log('access', access_token);
-
-      const user = await googleLoginOrRegister(access_token);
-      if (user) {
-        login(user);
-        navigation.goBack();
-      }
-    }
-  });
-
-  const appleLogin = useMutation(async () => {
-    const { identityToken } = await AppleAuthentication.signInAsync({
-      requestedScopes: [
-        AppleAuthentication.AppleAuthenticationScope.EMAIL,
-        AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
-      ],
-    });
-    if (identityToken) {
-      const user = await appleLoginOrRegister(identityToken);
-      if (user) {
-        login(user);
-        navigation.goBack;
-      }
-    }
-  });
-
-  if (
-    nativeLogin.isLoading ||
-    facebookLogin.isLoading ||
-    googleLogin.isLoading ||
-    appleLogin.isLoading
-  )
-    return <Loading />;
+  const { login } = useUser();
+  const { nativeLogin, facebookAuth, googleAuth, appleAuth } = useAuth();
 
   return (
     <KeyboardAwareScrollView bounces={false}>
@@ -123,7 +40,7 @@ export const SignInScreen = () => {
               password: yup.string().required('A password is required.'),
             })}
             onSubmit={async (values) => {
-              nativeLogin.mutate(values);
+              await nativeLogin(values);
             }}>
             {({ values, errors, touched, handleChange, handleSubmit, setFieldTouched }) => {
               return (
@@ -168,14 +85,14 @@ export const SignInScreen = () => {
                   <GoogleButton
                     text="Continue with Google"
                     style={styles.button}
-                    onPress={() => googleLogin.mutate()}
+                    onPress={async () => await googleAuth()}
                   />
                   <FacebookButton
                     text="Continue with Facebook"
                     style={styles.button}
-                    onPress={() => facebookLogin.mutate()}
+                    onPress={async () => await facebookAuth()}
                   />
-                  <AppleButton type="sign-in" onPress={() => appleLogin.mutate()} />
+                  <AppleButton type="sign-in" onPress={async () => await appleAuth()} />
                 </>
               );
             }}

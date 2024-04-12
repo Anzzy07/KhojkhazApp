@@ -1,50 +1,24 @@
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { View, StyleSheet } from 'react-native';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
-import axios from 'axios';
 import { Formik } from 'formik';
 import * as yup from 'yup';
-import { useNavigation } from '@react-navigation/native';
 
 import { Screen } from 'components/Screen';
-import { endpoints } from '../constants';
-import { Apartment, EditApartment } from 'types/apartment';
+import { EditApartment } from 'types/apartment';
 import { bedValues } from 'constants/bedValues';
 import { bathValues } from 'constants/bathValues';
 import { ManageUnitsCard } from '../components/ManageUnitsCard';
 import { Button, Divider } from '@ui-kitten/components';
 import { theme } from 'theme';
-import { useLoading } from 'hooks/useLoading';
 import { PickerItem } from 'react-native-woodpicker/dist/types';
+import { useApartmentsQuery } from 'hooks/queries/useapartmentsQuery';
+import { useEditApartmentMutation } from 'hooks/mutations/useEditApartmentsMutation';
 
 export const ManageUnitsScreen = ({ route }: { route: { params: { propertyID: number } } }) => {
-  const queryClient = useQueryClient();
-  const { setLoading } = useLoading();
-  const navigation = useNavigation();
-  const apartments = useQuery<{ data: Apartment[] }>('apartments', () =>
-    axios.get(`${endpoints.getApartmentsByPropertyID}${route.params.propertyID}`)
-  );
+  const apartments = useApartmentsQuery(route.params.propertyID);
+  const editApartments = useEditApartmentMutation();
 
-  const editApartments = useMutation(
-    (obj: EditApartment[]) =>
-      axios.patch(`${endpoints.updateApartments}${route.params.propertyID}`, obj),
-    {
-      onMutate: () => {
-        setLoading(true);
-      },
-      onError(err) {
-        setLoading(false);
-        alert('Error updating apartments');
-      },
-      onSuccess() {
-        queryClient.invalidateQueries('myproperties');
-        setLoading(false);
-        navigation.goBack();
-      },
-    }
-  );
-
-  const apartmentData = apartments.data?.data;
+  const apartmentData = apartments.data;
   const initialApartments: EditApartment[] = [];
   if (apartmentData) {
     for (let i of apartmentData) {
@@ -75,7 +49,10 @@ export const ManageUnitsScreen = ({ route }: { route: { params: { propertyID: nu
               i.sqFt = Number(i.sqFt);
             }
 
-            editApartments.mutate(values.apartments);
+            editApartments.mutate({
+              obj: values.apartments,
+              propertyID: route.params.propertyID,
+            });
           }}>
           {({
             values,

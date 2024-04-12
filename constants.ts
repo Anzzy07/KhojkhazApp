@@ -56,4 +56,7 @@ export const queryKeys = {
   searchProperties: 'searchProperties',
   selectedProperty: 'selectedProperty',
   savedProperties: 'savedProperties',
+  myProperties: 'myProperties',
+  editProperty: 'editProperty',
+  apartments: 'apartments',
 };

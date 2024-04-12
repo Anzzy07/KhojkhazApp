@@ -70,3 +70,33 @@ export const appleLoginOrRegister = async (identityToken: string) => {
     handleError(error);
   }
 };
+
+export const forgotPassword = async (email: string) => {
+  try {
+    const { data } = await axios.post<{ emailSent: boolean }>(endpoints.forgotPassword, { email });
+
+    return data;
+  } catch (error) {
+    handleError(error);
+  }
+};
+
+export const resetPassword = async (password: string, token: string) => {
+  try {
+    const { data } = await axios.post(
+      endpoints.resetPassword,
+      { password },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return data;
+  } catch (error: any) {
+    if (error.response.status === 401) return alert('Invalid or Expired Token');
+
+    alert('Unable to reset password.');
+  }
+};

@@ -1,34 +1,119 @@
-import { useContext } from 'react';
-import * as SecureStore from 'expo-secure-store';
-import { QueryClient, useQueryClient } from 'react-query';
-import { AuthContext } from 'context';
-import { User } from 'types/user';
+import { useNavigation } from '@react-navigation/native';
+import * as Facebook from 'expo-auth-session/providers/facebook';
+import * as Google from 'expo-auth-session/providers/google';
+import * as AppleAuthentication from 'expo-apple-authentication';
+
+import {
+  appleLoginOrRegister,
+  facebookLoginOrRegister,
+  googleLoginOrRegister,
+  loginUser,
+  registerUser,
+} from '../services/user';
+import { User } from '../types/user';
+import { useUser } from './useUser';
+import { useLoading } from './useLoading';
 
 export const useAuth = () => {
-  const { user, setUser } = useContext(AuthContext);
-  const queryClient = useQueryClient();
+  const [_, googleResponse, googleAuth] = Google.useAuthRequest({
+    expoClientId: '841113567422-4h0fi2te8ngedfi9unk4m1bbbmrjiun4.apps.googleusercontent.com',
+    iosClientId: '841113567422-ovi5t3grd0a5cereu56fqqp8phk6j2kg.apps.googleusercontent.com',
+    androidClientId: '841113567422-brvrdcgvb26s21ku994mqisiefe7hk27.apps.googleusercontent.com',
+    webClientId: 'GOOGLE_GUID.apps.googleusercontent.com',
+  });
 
-  const login = (user: User) => {
-    let stringUser = JSON.stringify(user);
-    setUser(user);
-    SecureStore.setItemAsync('user', stringUser);
-    queryClient.refetchQueries();
-  };
+  const [___, ____, fbPromptAsync] = Facebook.useAuthRequest({
+    clientId: '229503536901618',
+    redirectUri: 'https://auth.expo.io/@anzel/khojkhaz',
+  });
 
-  const logout = () => {
-    setUser(null);
-    SecureStore.deleteItemAsync('user');
-    queryClient.clear();
-  };
+  const { login } = useUser();
+  const { goBack } = useNavigation();
+  const { setLoading } = useLoading();
 
-  const setSavedProperties = (savedProperties: number[]) => {
+  const handleSignInUser = (user?: User | null) => {
     if (user) {
-      const newUser = { ...user };
-      newUser.savedProperties = savedProperties;
-      let stringUser = JSON.stringify(newUser);
-      SecureStore.setItemAsync('user', stringUser);
+      login(user);
+      goBack();
     }
   };
 
-  return { user, login, logout, setSavedProperties };
+  const handleAuthError = () => alert('Unable to authorize');
+
+  const nativeRegister = async (values: {
+    firstName: string;
+    lastName: string;
+    email: string;
+    password: string;
+  }) => {
+    try {
+      setLoading(true);
+
+      const user = await registerUser(
+        values.firstName,
+        values.lastName,
+        values.email,
+        values.password
+      );
+      handleSignInUser(user);
+    } catch (error) {
+      handleAuthError();
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const nativeLogin = async (values: { email: string; password: string }) => {
+    try {
+      setLoading(true);
+
+      const user = await loginUser(values.email, values.password);
+      handleSignInUser(user);
+    } catch (error) {
+      handleAuthError();
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const facebookAuth = async () => {
+    try {
+      const response = await fbPromptAsync();
+      if (response.type === 'success') {
+        setLoading(true);
+        const { access_token } = response.params;
+
+        const user = await facebookLoginOrRegister(access_token);
+        handleSignInUser(user);
+      }
+    } catch (error) {
+      handleAuthError();
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const appleAuth = async () => {
+    try {
+      const { identityToken } = await AppleAuthentication.signInAsync({
+        requestedScopes: [
+          AppleAuthentication.AppleAuthenticationScope.EMAIL,
+          AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
+        ],
+      });
+
+      if (identityToken) {
+        setLoading(true);
+
+        const user = await appleLoginOrRegister(identityToken);
+        handleSignInUser(user);
+      }
+    } catch (error) {
+      handleAuthError();
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { nativeRegister, nativeLogin, facebookAuth, googleAuth, appleAuth };
 };

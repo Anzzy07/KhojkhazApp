@@ -9,10 +9,10 @@ import { theme } from 'theme';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from 'navigation';
 import { ButtonList } from 'components/ButtonList';
-import { useAuth } from 'hooks/useAuth';
+import { useUser } from 'hooks/useUser';
 
 export const AccountScreen = () => {
-  const { user, logout } = useAuth();
+  const { user, logout } = useUser();
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
   const firstSignedOutButtons = [

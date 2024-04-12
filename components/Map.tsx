@@ -3,15 +3,14 @@ import { View, StyleSheet, Platform, TouchableOpacity } from 'react-native';
 import { useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from 'navigation';
-import { useQuery } from 'react-query';
-import axios from 'axios';
+
 import { Property } from '../types/property';
 import { MapMarker } from '../components/MapMarker';
 import { theme } from '../theme';
 import { Card } from '../components/Card';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Button } from '@ui-kitten/components';
-import { endpoints, queryKeys } from '../constants';
+import { useSearchPropertiesQuery } from 'hooks/queries/useSearchPropertiesQuery';
 
 // used to persist the region if search area from the map
 let mapRegion: Region | undefined = undefined;
@@ -35,22 +34,7 @@ export const Map = ({
   const [region, setRegion] = useState<Region | undefined>(mapRegion ? mapRegion : undefined);
   const navigation = useNavigation<RootStackParamList>();
 
-  const searchProperties = useQuery(
-    queryKeys.searchProperties,
-    () => {
-      if (boundingBox.length > 0) {
-        return axios.post(`${endpoints.getPropertiesByBoundingBox}`, {
-          latLow: boundingBox[0],
-          latHigh: boundingBox[1],
-          lngLow: boundingBox[2],
-          lngHigh: boundingBox[3],
-        });
-      }
-    },
-    {
-      enabled: false,
-    }
-  );
+  const searchProperties = useSearchPropertiesQuery(boundingBox);
 
   useEffect(() => {
     if (location === 'Map Area') return;

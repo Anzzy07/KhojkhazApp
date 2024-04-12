@@ -1,4 +1,4 @@
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Pressable } from 'react-native';
 import { Text, Button, Divider } from '@ui-kitten/components';
 
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -9,8 +9,9 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from 'navigation';
 import { useNavigation } from '@react-navigation/native';
 import { callPhoneNumber } from 'utils/callPhoneNumber';
-import { MyPropertiesScreen } from 'screens/MyPropertiesScreen';
 import { getStateAbbreviation } from 'utils/getStateAbbreviation';
+import { useUser } from 'hooks/useUser';
+import { useSavePropertyMutation } from 'hooks/mutations/useSavePropertyMutation';
 
 export const CardInformation = ({
   property,
@@ -19,7 +20,27 @@ export const CardInformation = ({
   property: Property;
   myProperty?: boolean;
 }) => {
+  const { user, setSavedProperties } = useUser();
+  const saveProperty = useSavePropertyMutation();
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+
+  const alterUsersSavedProperties = (propertyID: number, type: 'add' | 'remove') => {
+    let newProperties: number[] = user?.savedProperties ? [...user.savedProperties] : [];
+
+    if (type === 'add') newProperties.push(propertyID);
+    else newProperties = newProperties.filter((i) => i !== propertyID);
+
+    setSavedProperties(newProperties);
+  };
+
+  const handleHeartPress = () => {
+    if (!user) return alert('Please sign up or sign in to save properties');
+    let op: 'add' | 'remove' = 'add';
+    if (property?.liked) op = 'remove';
+
+    alterUsersSavedProperties(property.ID, op);
+    saveProperty.mutate({ propertyID: property.ID, op });
+  };
 
   const manageUnitsNavigation = () =>
     navigation.navigate('ManageUnits', { propertyID: property.ID });
@@ -46,11 +67,13 @@ export const CardInformation = ({
       {property?.rentLow && property?.rentHigh && (
         <Row style={styles.rowJustification}>
           <Text category={'s1'}>{getLowAndHighText('rent')}</Text>
-          <MaterialCommunityIcons
-            name="heart-outline"
-            color={theme['color-primary-500']}
-            size={24}
-          />
+          <Pressable onPress={handleHeartPress} style={styles.heartContainer}>
+            <MaterialCommunityIcons
+              name={property?.liked ? 'heart' : 'heart-outline'}
+              color={theme['color-primary-500']}
+              size={24}
+            />
+          </Pressable>
         </Row>
       )}
       <Text category={'c1'}>{getLowAndHighText('bedroom')}</Text>

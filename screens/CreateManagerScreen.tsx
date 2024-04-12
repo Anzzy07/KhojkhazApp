@@ -12,14 +12,14 @@ import axios from 'axios';
 import { Screen } from 'components/Screen';
 import { ModalHeader } from 'components/ModalHeader';
 import { PhoneInput } from 'components/PhoneInput';
-import { useAuth } from 'hooks/useAuth';
+import { useUser } from 'hooks/useUser';
 import { endpoints } from '../constants';
 import { Loading } from 'components/loading';
 
 export const CreateManagerScreen = ({ refetchManagers }: { refetchManagers?: () => void }) => {
   const [imageURI, setImageURI] = useState('');
   const phoneRef = useRef<RNPhoneInput>(null);
-  const { user } = useAuth();
+  const { user } = useUser();
 
   const pickImage = async (setBase64Image: (field: string, value: any) => void, field: string) => {
     let result = await ImagePicker.launchImageLibraryAsync({

@@ -6,43 +6,28 @@ import { useNavigation } from '@react-navigation/native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from 'navigation';
-import axios from 'axios';
-import { useMutation } from 'react-query';
 
 import { Screen } from 'components/Screen';
 import { ModalHeader } from 'components/ModalHeader';
 import { PasswordInput } from 'components/PasswordInput';
-import { Loading } from 'components/loading';
-import { endpoints } from '../constants';
+import { useLoading } from '../hooks/useLoading';
+import { resetPassword } from '../services/user';
 
 export const ResetPasswordScreen = ({ route }: { route: { params: { token: string } } }) => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+  const { setLoading } = useLoading();
 
-  const resetPassword = useMutation(
-    async (password: string) => {
-      return axios.post(
-        endpoints.resetPassword,
-        { password },
-        {
-          headers: {
-            Authorization: `Bearer ${route.params.token}`,
-          },
-        }
-      );
-    },
-    {
-      onSuccess() {
-        navigation.navigate('SignIn');
-      },
-      onError(error: any) {
-        if (error.response.status === 401) return alert('Invalid or Expired Token');
-
-        alert('Unable to reset password.');
-      },
+  const handleSubmit = async (values: { password: string; passwordRepeat: string }) => {
+    try {
+      setLoading(true);
+      const passwordReset = await resetPassword(values.password, route.params.token);
+      if (passwordReset) navigation.navigate('SignIn');
+    } catch (error) {
+      alert('Unable to reset password');
+    } finally {
+      setLoading(false);
     }
-  );
-
-  if (resetPassword.isLoading) return <Loading />;
+  };
 
   return (
     <KeyboardAwareScrollView bounces={false}>
@@ -69,9 +54,7 @@ export const ResetPasswordScreen = ({ route }: { route: { params: { token: strin
               .oneOf([yup.ref('password'), undefined], "Passwords don't match")
               .required('Required'),
           })}
-          onSubmit={(values) => {
-            resetPassword.mutate(values.password);
-          }}>
+          onSubmit={handleSubmit}>
           {({
             values,
             errors,

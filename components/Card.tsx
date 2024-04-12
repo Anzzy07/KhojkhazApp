@@ -13,16 +13,13 @@ import { Button } from '@ui-kitten/components';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from 'navigation';
 import { useNavigation } from '@react-navigation/native';
-import { useMutation, useQueryClient } from 'react-query';
-import axios from 'axios';
 
 import { Property } from '../types/property';
 import { ImageCarousel } from '../components/ImageCarousel';
 import { CardInformation } from '../components/CardInformation';
 import { LISTMARGIN } from '../constants';
 import { theme } from 'theme';
-import { endpoints } from '../constants';
-import { useLoading } from 'hooks/useLoading';
+import { useDeletePropertyMutation } from '../hooks/mutations/useDeletePropertyMutation';
 
 export const Card = ({
   property,
@@ -35,41 +32,11 @@ export const Card = ({
   myProperty?: boolean;
   style?: ViewStyle;
 }) => {
-  const { setLoading } = useLoading();
-  const queryClient = useQueryClient();
   const [showModal, setShowModal] = useState(false);
   const openModal = () => setShowModal(true);
   const closeModal = () => setShowModal(false);
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
-  const deleteProperty = useMutation(
-    () => axios.delete(`${endpoints.deleteProperty}${property.ID}`),
-    {
-      onMutate: async () => {
-        setLoading(true);
-        await queryClient.cancelQueries('myproperties');
-
-        const prevProperties: { data: Property[] } | undefined =
-          queryClient.getQueryData('myproperties');
-
-        if (prevProperties) {
-          const filtered = prevProperties.data.filter((i) => i.ID !== property.ID);
-
-          queryClient.setQueryData('myproperties', filtered);
-        }
-
-        return { prevProperties };
-      },
-      onError: (err, newTodo, context) => {
-        setLoading(false);
-        if (context?.prevProperties)
-          queryClient.setQueryData('myproperties', context?.prevProperties);
-      },
-      onSettled: () => {
-        setLoading(false);
-        queryClient.invalidateQueries('myproperties');
-      },
-    }
-  );
+  const deleteProperty = useDeletePropertyMutation();
 
   const handleEditProperty = () => {
     navigation.navigate('EditProperty', { propertyID: property.ID });
@@ -77,7 +44,7 @@ export const Card = ({
   };
 
   const handleDeleteProperty = () => {
-    deleteProperty.mutate();
+    deleteProperty.mutate({ propertyID: property.ID });
     closeModal();
   };
 
