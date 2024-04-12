@@ -14,10 +14,10 @@ import { AmentitiesSection } from 'components/propertyDetailsSections/AmenitiesS
 import { LeaseAndFeesSection } from '../components/propertyDetailsSections/LeaseAndFeesSection';
 import { LocationSection } from 'components/propertyDetailsSections/LocationSection';
 import { ReviewSection } from 'components/propertyDetailsSections/ReviewSection';
-import { endpoints } from '../constants';
+import { endpoints, queryKeys } from '../constants';
 
 export const PropertyDetailsScreen = ({ route }: { route: { params: { propertyID: number } } }) => {
-  const property = useQuery('selectedproperty', () => {
+  const property = useQuery(queryKeys.selectedProperty, () => {
     return axios.get(`${endpoints.getPropertyByID}${route.params.propertyID}`);
   });
 

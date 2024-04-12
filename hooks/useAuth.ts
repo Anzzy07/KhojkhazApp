@@ -21,5 +21,14 @@ export const useAuth = () => {
     queryClient.clear();
   };
 
-  return { user, login, logout };
+  const setSavedProperties = (savedProperties: number[]) => {
+    if (user) {
+      const newUser = { ...user };
+      newUser.savedProperties = savedProperties;
+      let stringUser = JSON.stringify(newUser);
+      SecureStore.setItemAsync('user', stringUser);
+    }
+  };
+
+  return { user, login, logout, setSavedProperties };
 };

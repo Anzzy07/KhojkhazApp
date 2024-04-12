@@ -11,7 +11,7 @@ import { theme } from '../theme';
 import { Card } from '../components/Card';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Button } from '@ui-kitten/components';
-import { endpoints } from '../constants';
+import { endpoints, queryKeys } from '../constants';
 
 // used to persist the region if search area from the map
 let mapRegion: Region | undefined = undefined;
@@ -36,7 +36,7 @@ export const Map = ({
   const navigation = useNavigation<RootStackParamList>();
 
   const searchProperties = useQuery(
-    'searchproperties',
+    queryKeys.searchProperties,
     () => {
       if (boundingBox.length > 0) {
         return axios.post(`${endpoints.getPropertiesByBoundingBox}`, {

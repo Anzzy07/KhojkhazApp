@@ -10,7 +10,7 @@ import axios from 'axios';
 import { Screen } from 'components/Screen';
 import { ModalHeader } from 'components/ModalHeader';
 import { theme } from 'theme';
-import { endpoints } from '../constants';
+import { endpoints, queryKeys } from '../constants';
 import { SignUpOrSignInScreen } from './SignUpOrSignInScreen';
 import { Row } from '../components/Row';
 import { TouchableStarsContainer } from '../components/TouchableStarsContainer';
@@ -35,7 +35,7 @@ export const ReviewScreen = ({
         setLoading(true);
       },
       onSuccess: () => {
-        queryClient.invalidateQueries('selectedproperty');
+        queryClient.invalidateQueries(queryKeys.selectedProperty);
       },
       onError: () => {
         alert('Unable to create review');

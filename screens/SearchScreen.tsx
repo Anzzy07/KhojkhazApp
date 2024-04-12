@@ -9,7 +9,7 @@ import axios from 'axios';
 import { Screen } from 'components/Screen';
 import { getPropertiesInArea } from '../data/properties';
 import { Card } from '../components/Card';
-import { HEADERHEIGHT, endpoints } from '../constants';
+import { HEADERHEIGHT, endpoints, queryKeys } from '../constants';
 import { AnimatedListHeader } from '../components/AnimatedListHeader';
 import { Map } from '../components/Map';
 import { RootStackParamList, SearchScreenParams } from 'navigation';
@@ -23,7 +23,7 @@ export const SearchScreen = ({ route }: { route: { params: SearchScreenParams } 
   const mapRef = useRef<MapView | null>(null);
   const [location, setLocation] = useState<string | undefined>(undefined);
   const searchProperties = useQuery(
-    'searchproperties',
+    queryKeys.searchProperties,
     () => {
       if (route.params.boundingBox) {
         const boundingBox = [

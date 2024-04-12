@@ -36,6 +36,7 @@ export type Property = {
   firstName: string;
   lastName: string;
   email: string;
+  liked?: boolean;
 };
 
 export type CreateProperty = {
