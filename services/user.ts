@@ -100,3 +100,12 @@ export const resetPassword = async (password: string, token: string) => {
     alert('Unable to reset password.');
   }
 };
+
+export const alterPushToken = (userID: number, op: 'add' | 'remove', token: string) =>
+  axios.patch(endpoints.alterPushToken(userID), {
+    op,
+    token: token,
+  });
+
+export const alterAllowsNotifications = (userID: number, allowsNotifications: boolean) =>
+  axios.patch(endpoints.allowsNotifications(userID), { allowsNotifications });

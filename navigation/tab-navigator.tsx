@@ -1,9 +1,12 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { createStackNavigator } from '@react-navigation/stack';
 import { SearchScreen } from '../screens/SearchScreen';
 import { SavedScreen } from 'screens/SavedScreen';
 import { AccountScreen } from 'screens/AccountScreen';
 import { theme } from '../theme';
+import { AccountSettingsScreen } from 'screens/AccountSettingsScreen';
+import { AccountTabParamList } from 'navigation';
 
 const Tab = createBottomTabNavigator();
 
@@ -40,7 +43,7 @@ export default function TabLayout() {
       />
       <Tab.Screen
         name="AccountRoot"
-        component={AccountScreen}
+        component={AccountStack}
         options={{
           headerShown: false,
           tabBarLabel: 'Account',
@@ -50,3 +53,22 @@ export default function TabLayout() {
     </Tab.Navigator>
   );
 }
+
+const AccountStackNavigator = createStackNavigator<AccountTabParamList>();
+const AccountStack = () => (
+  <AccountStackNavigator.Navigator initialRouteName="Account">
+    <AccountStackNavigator.Screen
+      name="Account"
+      component={AccountScreen}
+      options={{ headerShown: false }}
+    />
+    <AccountStackNavigator.Screen
+      name="Settings"
+      component={AccountSettingsScreen}
+      options={{
+        headerTitle: 'Account Settings',
+        headerBackTitle: 'Back',
+      }}
+    />
+  </AccountStackNavigator.Navigator>
+);

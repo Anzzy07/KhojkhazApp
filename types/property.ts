@@ -1,6 +1,5 @@
 import { Apartment } from './apartment';
 import { Review } from './review';
-import { Pet } from './pet';
 import { Score } from './score';
 import { TempApartment } from './tempApartments';
 
@@ -26,17 +25,18 @@ export type Property = {
   description?: string;
   stars: number;
   onMarket?: boolean;
+  reviews?: Review[];
+  apartments: Apartment[];
+  scores?: Score[];
   includedUtilities?: string[];
   amenities?: string[];
   petsAllowed: string;
   laundryType: string;
-  reviews?: Review[];
-  apartments: Apartment[];
-  scores?: Score[];
   parkingFee?: number;
   firstName: string;
   lastName: string;
   email: string;
+  userID: number;
   liked?: boolean;
 };
 

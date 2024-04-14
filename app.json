@@ -3,7 +3,7 @@
     "name": "khojkhaz",
     "slug": "khojkhaz",
     "version": "1.0.0",
-    "scheme": "khojkhaz",
+    "scheme": "com.anzel.khojkhaz",
     "web": {
       "favicon": "./assets/favicon.png"
     },
@@ -20,11 +20,11 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "bundleIdentifier": "com.anzel.khojkhaz",
       "supportsTablet": true
     },
     "android": {
       "package": "com.anzel.khojkhaz",
+      "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"

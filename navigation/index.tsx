@@ -1,6 +1,8 @@
 import { NavigationContainer, NavigatorScreenParams } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import TabNavigator from './tab-navigator';
+import { useEffect } from 'react';
+import * as Notifications from 'expo-notifications';
 import { FindLocationsScreen } from 'screens/FindLocationsScreen';
 import { SignInScreen } from 'screens/SignInScreen';
 import { SignUpScreen } from 'screens/SignUpScreen';
@@ -13,11 +15,17 @@ import { EditPropertyScreen } from 'screens/EditPropertyScreen';
 import { MyPropertiesScreen } from 'screens/MyPropertiesScreen';
 import { ManageUnitsScreen } from 'screens/ManageUnitsScreen';
 import { ReviewScreen } from 'screens/ReviewScreen';
+import { useNotifications } from 'hooks/useNotifications';
 
 export type TabNavigatorParamList = {
   Search: undefined | SearchScreenParams;
   Saved: undefined;
+  AccountRoot: NavigatorScreenParams<AccountTabParamList> | undefined;
+};
+
+export type AccountTabParamList = {
   Account: undefined;
+  Settings: undefined;
 };
 
 export type RootStackParamList = {
@@ -49,6 +57,26 @@ export type SearchScreenParams = {
 const Stack = createStackNavigator<RootStackParamList>();
 
 export default function RootStack() {
+  const { registerForPushNotificationsAsync, handleNotificationResponse } = useNotifications();
+
+  useEffect(() => {
+    registerForPushNotificationsAsync();
+    Notifications.setNotificationHandler({
+      handleNotification: async () => ({
+        shouldShowAlert: true,
+        shouldPlaySound: true,
+        shouldSetBadge: true,
+      }),
+    });
+
+    const responseListener = Notifications.addNotificationResponseReceivedListener(
+      handleNotificationResponse
+    );
+
+    return () => {
+      if (responseListener) Notifications.removeNotificationSubscription(responseListener);
+    };
+  }, []);
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="TabNavigator">

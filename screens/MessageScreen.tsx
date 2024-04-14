@@ -4,16 +4,18 @@ import { useNavigation } from '@react-navigation/native';
 import * as yup from 'yup';
 import { Formik } from 'formik';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList } from 'navigation';
 import DateTimePicker from 'react-native-modal-datetime-picker';
+
 import { Screen } from 'components/Screen';
 import { ModalHeader } from 'components/ModalHeader';
 import { getStateAbbreviation } from 'utils/getStateAbbreviation';
 import { Row } from 'components/Row';
 import { useUser } from 'hooks/useUser';
-import { properties } from 'data/properties';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { RootStackParamList } from 'navigation';
 import { PressableInput } from 'components/PressableInput';
+import { useSelectedPropertyQuery } from 'hooks/queries/useSelectedPropertyQuery';
+import { SignUpOrSignInScreen } from './SignUpOrSignInScreen';
 
 export const MessageScreen = ({
   route,
@@ -22,18 +24,23 @@ export const MessageScreen = ({
 }) => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const { tour, propertyID } = route.params;
-  const index = properties.findIndex((i) => i.ID === propertyID);
-  const property = properties[index];
+  const propertyQuery = useSelectedPropertyQuery(propertyID);
+  const property = propertyQuery.data;
   const { user } = useUser();
+
+  if (!user) return <SignUpOrSignInScreen />;
+  if (!property) return <Text>Unable to get property</Text>;
 
   return (
     <KeyboardAwareScrollView bounces={false}>
       <Screen style={styles.container}>
         {Platform.OS === 'ios' ? <ModalHeader /> : null}
         <Row style={styles.row}>
-          <Image style={styles.image} source={{ uri: property.images[0] }} />
+          {property?.images && property.images.length > 0 ? (
+            <Image style={styles.image} source={{ uri: property.images[0] }} />
+          ) : null}
           <View style={styles.address}>
-            <Text category={'s1'}>{property.name}</Text>
+            {property?.name ? <Text category={'s1'}>{property.name}</Text> : null}
             <Text category={'c1'}>
               {property.street}, {property.city}, {getStateAbbreviation(property.state)}{' '}
               {property.zip}
