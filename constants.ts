@@ -17,21 +17,28 @@ androidHeight += androidNotch;
 export const HEADERHEIGHT = Platform.OS === 'ios' ? iosHeight : androidHeight;
 
 const serverUrl = 'http://192.168.2.98:4000/api';
+const chatUrl = 'http://192.168.2.98:3000';
 const location = '/location';
 const user = '/user';
 const apartment = '/apartment';
 const property = '/property';
 const review = '/review';
+const conversation = '/conversation';
+const messages = '/messages';
 const locationEndpoint = serverUrl + location;
 const userEndpoint = serverUrl + user;
 const propertyEndpoint = serverUrl + property;
 const apartmentEndpoint = serverUrl + apartment;
 const reviewEndpoint = serverUrl + review;
+const conversationEndpoint = serverUrl + conversation;
+const messagesEndpoint = serverUrl + messages;
+const contactedEndpoint = (id: number) => `${userEndpoint}/${id}/properties/contacted`;
 const savedEndpoint = (id: number) => `${userEndpoint}/${id}/properties/saved`;
 const pushTokenEndpoint = (id: number) => `${userEndpoint}/${id}/pushtoken`;
 const allowsNotificationsEndpoint = (id: number) => `${userEndpoint}/${id}/settings/notifications`;
 
 export const endpoints = {
+  chat: chatUrl,
   autoComplete: locationEndpoint + '/autocomplete',
   search: locationEndpoint + '/search',
   register: userEndpoint + '/register',
@@ -43,6 +50,7 @@ export const endpoints = {
   resetPassword: userEndpoint + '/resetpassword',
   createProperty: propertyEndpoint + '/create',
   getPropertyByID: propertyEndpoint + '/',
+  getContactedPropertiesByUserID: contactedEndpoint,
   getPropertiesByUserID: propertyEndpoint + '/userid/',
   getPropertiesByBoundingBox: propertyEndpoint + '/search',
   deleteProperty: propertyEndpoint + '/',
@@ -54,6 +62,10 @@ export const endpoints = {
   alterSavedPropertiesByUserID: savedEndpoint,
   alterPushToken: pushTokenEndpoint,
   allowsNotifications: allowsNotificationsEndpoint,
+  createConversation: conversationEndpoint + '/',
+  getConversationByID: conversationEndpoint + '/',
+  getConversationsByUserID: conversationEndpoint + '/user/',
+  createMessage: messagesEndpoint + '/',
 };
 
 export const queryKeys = {
@@ -63,4 +75,7 @@ export const queryKeys = {
   myProperties: 'myProperties',
   editProperty: 'editProperty',
   apartments: 'apartments',
+  contactedProperties: 'contactedProperties',
+  conversations: 'conversations',
+  selectedConversation: 'selectedConversation',
 };

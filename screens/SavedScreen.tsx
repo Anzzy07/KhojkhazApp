@@ -15,13 +15,14 @@ import { useUser } from 'hooks/useUser';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useSavedPropertiesQuery } from 'hooks/queries/useSavedPropertiesQuery';
 import { Loading } from 'components/loading';
+import { useContactedPropertiesQuery } from 'hooks/queries/useContacetedPropertiesQuery';
 
 export const SavedScreen = () => {
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const { user } = useUser();
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const savedProperties = useSavedPropertiesQuery();
-  const contactedProperties = undefined;
+  const contactedProperties = useContactedPropertiesQuery();
   const applicationProperties = undefined;
 
   // Refetching saved properties doesn't occur after login
@@ -45,7 +46,7 @@ export const SavedScreen = () => {
     setActiveIndex(index);
   };
 
-  if (savedProperties.isLoading) return <Loading />;
+  if (savedProperties.isLoading || contactedProperties.isLoading) return <Loading />;
 
   const getBodyText = (heading: string, subHeading: string) => {
     return (
@@ -98,7 +99,8 @@ export const SavedScreen = () => {
       );
     }
     if (activeIndex === 1) {
-      if (contactedProperties) return getPropertiesFlatList(contactedProperties);
+      if (contactedProperties?.data && contactedProperties.data.length > 0)
+        return getPropertiesFlatList(contactedProperties.data);
       return (
         <>
           <LottieView

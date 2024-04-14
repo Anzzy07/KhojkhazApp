@@ -7,6 +7,8 @@ import { AccountScreen } from 'screens/AccountScreen';
 import { theme } from '../theme';
 import { AccountSettingsScreen } from 'screens/AccountSettingsScreen';
 import { AccountTabParamList } from 'navigation';
+import { ConversationsScreen } from 'screens/ConversationsScreen';
+import { MessagesScreen } from 'screens/MessagesScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -67,6 +69,18 @@ const AccountStack = () => (
       component={AccountSettingsScreen}
       options={{
         headerTitle: 'Account Settings',
+        headerBackTitle: 'Back',
+      }}
+    />
+    <AccountStackNavigator.Screen
+      name="Conversations"
+      component={ConversationsScreen}
+      options={{ headerTitle: 'Conversations', headerBackTitle: 'Back' }}
+    />
+    <AccountStackNavigator.Screen
+      name="Messages"
+      component={MessagesScreen}
+      options={{
         headerBackTitle: 'Back',
       }}
     />

@@ -9,13 +9,15 @@ import { SignUpScreen } from 'screens/SignUpScreen';
 import { ForgotPasswordScreen } from 'screens/ForgotPasswordScreen';
 import { ResetPasswordScreen } from 'screens/ResetPasswordScreen';
 import { PropertyDetailsScreen } from 'screens/PropertyDetailsScreen';
-import { MessageScreen } from 'screens/MessageScreen';
+import { MessagePropertyScreen } from 'screens/MessagePropertyScreen';
 import { AddPropertyScreen } from 'screens/AddPropertyScreen';
 import { EditPropertyScreen } from 'screens/EditPropertyScreen';
 import { MyPropertiesScreen } from 'screens/MyPropertiesScreen';
 import { ManageUnitsScreen } from 'screens/ManageUnitsScreen';
 import { ReviewScreen } from 'screens/ReviewScreen';
 import { useNotifications } from 'hooks/useNotifications';
+import { ConversationsScreen } from 'screens/ConversationsScreen';
+import { MessagesScreen } from 'screens/MessagesScreen';
 
 export type TabNavigatorParamList = {
   Search: undefined | SearchScreenParams;
@@ -26,6 +28,8 @@ export type TabNavigatorParamList = {
 export type AccountTabParamList = {
   Account: undefined;
   Settings: undefined;
+  Conversations: undefined;
+  Messages: { conversationID: number; recipientName: string };
 };
 
 export type RootStackParamList = {
@@ -39,7 +43,7 @@ export type RootStackParamList = {
   ForgotPassword: undefined;
   ResetPassword: { token: string };
   PropertyDetails: { propertyID: number };
-  Message: { propertyID: number; tour?: boolean };
+  MessageProperty: { propertyID: number; tour?: boolean };
   AddProperty: undefined;
   EditProperty: { propertyID: number };
   MyProperties: undefined;
@@ -109,7 +113,11 @@ export default function RootStack() {
             component={PropertyDetailsScreen}
             options={{ headerShown: false }}
           />
-          <Stack.Screen name="Message" component={MessageScreen} options={{ headerShown: false }} />
+          <Stack.Screen
+            name="MessageProperty"
+            component={MessagePropertyScreen}
+            options={{ headerShown: false }}
+          />
           <Stack.Screen
             name="AddProperty"
             component={AddPropertyScreen}
