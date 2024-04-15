@@ -8,7 +8,11 @@ import { useUser } from '../useUser';
 const fetchProperties = async (userID?: number, token?: string): Promise<Property[]> => {
   if (!userID) return [];
 
-  const response = await axios.get(`${endpoints.getPropertiesByUserID}${userID}`);
+  const response = await axios.get(`${endpoints.getPropertiesByUserID}${userID}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
 
   const data: Property[] = response.data;
   return data;
@@ -17,5 +21,5 @@ const fetchProperties = async (userID?: number, token?: string): Promise<Propert
 export const useMyPropertiesQuery = () => {
   const { user } = useUser();
 
-  return useQuery(queryKeys.myProperties, () => fetchProperties(user?.ID));
+  return useQuery(queryKeys.myProperties, () => fetchProperties(user?.ID, user?.accessToken));
 };

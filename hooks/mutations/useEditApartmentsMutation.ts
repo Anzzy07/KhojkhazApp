@@ -8,7 +8,11 @@ import { useLoading } from '../useLoading';
 import { useUser } from '../useUser';
 
 const updateApartments = (propertyID: number, obj: EditApartment[], token?: string) =>
-  axios.patch(`${endpoints.updateApartments}${propertyID}`, obj);
+  axios.patch(`${endpoints.updateApartments}${propertyID}`, obj, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
 
 export const useEditApartmentMutation = () => {
   const queryClient = useQueryClient();
@@ -18,7 +22,7 @@ export const useEditApartmentMutation = () => {
 
   return useMutation(
     ({ propertyID, obj }: { propertyID: number; obj: EditApartment[] }) =>
-      updateApartments(propertyID, obj),
+      updateApartments(propertyID, obj, user?.accessToken),
     {
       onMutate: () => {
         setLoading(true);

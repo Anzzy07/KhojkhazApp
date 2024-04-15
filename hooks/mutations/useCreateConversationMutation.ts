@@ -9,20 +9,29 @@ import { useUser } from '../useUser';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from 'navigation';
 
-const createConversation = (values: CreateConversation) =>
-  axios.post<Conversation>(`${endpoints.createConversation}`, {
-    tenantID: values.tenantID,
-    ownerID: values.ownerID,
-    propertyID: values.propertyID,
-    senderID: values.senderID,
-    receiverID: values.receiverID,
-    text: values.text,
-  });
+const createConversation = (values: CreateConversation, token?: string) =>
+  axios.post<Conversation>(
+    `${endpoints.createConversation}`,
+    {
+      tenantID: values.tenantID,
+      ownerID: values.ownerID,
+      propertyID: values.propertyID,
+      senderID: values.senderID,
+      receiverID: values.receiverID,
+      text: values.text,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
 
 // This will only be called when a potential tenant wants to talk to an owner
 export const useCreateConversationMutation = () => {
   const queryClient = useQueryClient();
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+  const { user } = useUser();
 
   return useMutation(
     ({
@@ -40,14 +49,17 @@ export const useCreateConversationMutation = () => {
       senderName: string;
       text: string;
     }) =>
-      createConversation({
-        ownerID,
-        tenantID,
-        propertyID,
-        receiverID: ownerID,
-        senderID: tenantID,
-        text,
-      }),
+      createConversation(
+        {
+          ownerID,
+          tenantID,
+          propertyID,
+          receiverID: ownerID,
+          senderID: tenantID,
+          text,
+        },
+        user?.accessToken
+      ),
     {
       onSuccess: ({ data }, { propertyName, ownerID, text, tenantID, senderName }) => {
         queryClient.invalidateQueries(queryKeys.contactedProperties);

@@ -15,6 +15,7 @@ import { theme } from '../khojkhaz/theme';
 import { AuthContext, LoadingContext } from 'context';
 import { User } from 'types/user';
 import { queryKeys } from './constants';
+import { refreshTokens } from 'services/token';
 
 const queryClient = new QueryClient();
 LogBox.ignoreAllLogs();
@@ -27,7 +28,13 @@ export default function App() {
     async function getUser() {
       const user = await SecureStore.getItemAsync('user');
       if (user) {
-        const userObj = JSON.parse(user);
+        const userObj: User = JSON.parse(user);
+        const newTokens = await refreshTokens(userObj.refreshToken);
+        if (newTokens) {
+          userObj.accessToken = newTokens.accessToken;
+          userObj.refreshToken = newTokens.refreshToken;
+          SecureStore.setItemAsync('user', JSON.stringify(userObj));
+        }
         setUser(userObj);
 
         socket.auth = {
@@ -36,6 +43,7 @@ export default function App() {
             userObj.firstName && userObj.lastName
               ? `${userObj.firstName} ${userObj.lastName}`
               : `${userObj.email}`,
+          accessToken: userObj.accessToken,
         };
 
         socket.connect();

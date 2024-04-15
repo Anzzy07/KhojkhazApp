@@ -8,7 +8,11 @@ import { useNavigation } from '@react-navigation/native';
 import { useUser } from '../useUser';
 
 const createReview = (propertyID: number, review: CreateReview, token?: string) =>
-  axios.post(`${endpoints.createReview}${propertyID}`, review);
+  axios.post(`${endpoints.createReview}${propertyID}`, review, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
 
 export const useCreateReviewMutation = () => {
   const { setLoading } = useLoading();
@@ -18,7 +22,7 @@ export const useCreateReviewMutation = () => {
 
   return useMutation(
     ({ propertyID, review }: { propertyID: number; review: CreateReview }) =>
-      createReview(propertyID, review),
+      createReview(propertyID, review, user?.accessToken),
     {
       onMutate: () => {
         setLoading(true);

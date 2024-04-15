@@ -5,10 +5,14 @@ import { endpoints, queryKeys } from '../../constants';
 import { Property } from '../../types/property';
 import { useUser } from '../useUser';
 
-const fetchProperties = async (userID?: number): Promise<Property[]> => {
+const fetchProperties = async (userID?: number, token?: string): Promise<Property[]> => {
   if (!userID) return [];
 
-  const response = await axios.get(endpoints.getContactedPropertiesByUserID(userID));
+  const response = await axios.get(endpoints.getContactedPropertiesByUserID(userID), {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
 
   const data: Property[] = response.data;
 
@@ -17,11 +21,15 @@ const fetchProperties = async (userID?: number): Promise<Property[]> => {
 
 export const useContactedPropertiesQuery = () => {
   const { user } = useUser();
-  const queryInfo = useQuery(queryKeys.contactedProperties, () => fetchProperties(user?.ID), {
-    retry: false,
-  });
+  const queryInfo = useQuery(
+    queryKeys.contactedProperties,
+    () => fetchProperties(user?.ID, user?.accessToken),
+    {
+      retry: false,
+    }
+  );
 
-  const data = queryInfo?.data; //getting data from query info
+  const data = queryInfo?.data;
   if (data)
     for (let property of data) {
       property.liked = false;

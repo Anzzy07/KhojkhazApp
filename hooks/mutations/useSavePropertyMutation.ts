@@ -5,11 +5,24 @@ import { useUser } from 'hooks/useUser';
 import { endpoints, queryKeys } from '../../constants';
 import { Property } from '../../types/property';
 
-const saveOrUnsaveProperty = (propertyID: number, op: 'add' | 'remove', userID?: number) =>
-  axios.patch(`${endpoints.alterSavedPropertiesByUserID(userID as number)}`, {
-    propertyID,
-    op,
-  });
+const saveOrUnsaveProperty = (
+  propertyID: number,
+  op: 'add' | 'remove',
+  userID?: number,
+  token?: string
+) =>
+  axios.patch(
+    `${endpoints.alterSavedPropertiesByUserID(userID as number)}`,
+    {
+      propertyID,
+      op,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
 
 export const useSavePropertyMutation = () => {
   const { user } = useUser();
@@ -17,7 +30,7 @@ export const useSavePropertyMutation = () => {
 
   return useMutation(
     ({ propertyID, op }: { propertyID: number; op: 'add' | 'remove' }) =>
-      saveOrUnsaveProperty(propertyID, op, user?.ID),
+      saveOrUnsaveProperty(propertyID, op, user?.ID, user?.accessToken),
     {
       onMutate: async ({ propertyID, op }) => {
         await queryClient.cancelQueries(queryKeys.savedProperties);
@@ -67,7 +80,6 @@ export const useSavePropertyMutation = () => {
           prevSelectedProperty,
         };
       },
-
       onError: (err, vars, context) => {
         queryClient.setQueryData(queryKeys.savedProperties, context?.prevSavedProperties);
         queryClient.setQueryData(queryKeys.searchProperties, context?.prevSearchedProperties);

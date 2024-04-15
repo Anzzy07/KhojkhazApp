@@ -10,7 +10,6 @@ import { FacebookButton } from 'components/FacebookButton';
 import { AppleButton } from 'components/AppleButton';
 import { PasswordInput } from 'components/PasswordInput';
 import { OrDivider } from 'components/OrDivider';
-
 import { useUser } from 'hooks/useUser';
 import { useAuth } from 'hooks/useAuth';
 

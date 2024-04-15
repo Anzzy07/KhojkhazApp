@@ -7,10 +7,17 @@ import { Message } from '../../types/message';
 import { getStateAbbreviation } from '../../utils/getStateAbbreviation';
 import { useUser } from '../useUser';
 
-const fetchConversations = async (userID?: number): Promise<TransformedConversation[]> => {
+const fetchConversations = async (
+  userID?: number,
+  token?: string
+): Promise<TransformedConversation[]> => {
   if (!userID) return [];
 
-  const response = await axios.get(`${endpoints.getConversationsByUserID}${userID}`);
+  const response = await axios.get(`${endpoints.getConversationsByUserID}${userID}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
 
   const conversations: ConversationsRes[] = response.data;
   const data: TransformedConversation[] = [];
@@ -42,11 +49,10 @@ const fetchConversations = async (userID?: number): Promise<TransformedConversat
 export const useConversationsQuery = () => {
   const { user } = useUser();
 
-  return useQuery(queryKeys.conversations, () => fetchConversations(user?.ID), {
+  return useQuery(queryKeys.conversations, () => fetchConversations(user?.ID, user?.accessToken), {
     retry: false,
   });
 };
-
 type ConversationsRes = {
   ID: number;
   CreatedAt: string;
