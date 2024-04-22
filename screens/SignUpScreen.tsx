@@ -14,8 +14,7 @@ import { useUser } from 'hooks/useUser';
 import { useAuth } from 'hooks/useAuth';
 
 export const SignUpScreen = () => {
-  const { login } = useUser();
-  const { nativeLogin, facebookAuth, googleAuth, appleAuth } = useAuth();
+  const { appleAuth, facebookAuth, googleAuth, nativeRegister } = useAuth();
 
   return (
     <KeyboardAwareScrollView bounces={false}>
@@ -45,7 +44,7 @@ export const SignUpScreen = () => {
                 ),
             })}
             onSubmit={async (values) => {
-              await nativeLogin(values);
+              await nativeRegister(values);
             }}>
             {({
               values,
@@ -111,18 +110,20 @@ export const SignUpScreen = () => {
                   <Button style={styles.signUpButton} onPress={() => handleSubmit()}>
                     Sign Up
                   </Button>
+
                   <OrDivider style={styles.orContainer} />
+
                   <GoogleButton
-                    text="Sign Up with Google"
+                    text="Sign up with Google"
                     style={styles.button}
                     onPress={async () => await googleAuth()}
                   />
                   <FacebookButton
-                    text="Sign Up with Facebook"
+                    text="Sign up with Facebook"
                     style={styles.button}
                     onPress={async () => await facebookAuth()}
                   />
-                  <AppleButton type="sign-in" onPress={async () => appleAuth()} />
+                  <AppleButton type="sign-up" onPress={async () => await appleAuth()} />
                 </>
               );
             }}

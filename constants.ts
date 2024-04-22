@@ -20,8 +20,8 @@ const serverUrl = 'http://192.168.2.98:4000/api';
 const chatUrl = 'http://192.168.2.98:3000';
 const location = '/location';
 const user = '/user';
-const apartment = '/apartment';
 const property = '/property';
+const apartment = '/apartment';
 const review = '/review';
 const conversation = '/conversation';
 const messages = '/messages';
@@ -72,13 +72,13 @@ export const endpoints = {
 };
 
 export const queryKeys = {
+  contactedProperties: 'contactedProperties',
   searchProperties: 'searchProperties',
   selectedProperty: 'selectedProperty',
   savedProperties: 'savedProperties',
   myProperties: 'myProperties',
   editProperty: 'editProperty',
   apartments: 'apartments',
-  contactedProperties: 'contactedProperties',
   conversations: 'conversations',
   selectedConversation: 'selectedConversation',
 };
