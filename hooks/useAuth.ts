@@ -2,7 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import * as Facebook from 'expo-auth-session/providers/facebook';
 import * as Google from 'expo-auth-session/providers/google';
 import * as AppleAuthentication from 'expo-apple-authentication';
-
+import { useEffect } from 'react';
 import {
   appleLoginOrRegister,
   facebookLoginOrRegister,
@@ -17,15 +17,36 @@ import { useLoading } from './useLoading';
 export const useAuth = () => {
   const [_, googleResponse, googleAuth] = Google.useAuthRequest({
     expoClientId: '841113567422-4h0fi2te8ngedfi9unk4m1bbbmrjiun4.apps.googleusercontent.com',
-    iosClientId: '841113567422-ovi5t3grd0a5cereu56fqqp8phk6j2kg.apps.googleusercontent.com',
-    androidClientId: '841113567422-brvrdcgvb26s21ku994mqisiefe7hk27.apps.googleusercontent.com',
-    webClientId: 'GOOGLE_GUID.apps.googleusercontent.com',
+    iosClientId: '841113567422-satb5vt4gk1qe5m4tishedcahfs9mfpp.apps.googleusercontent.com',
+    androidClientId: '841113567422-d3tl2mh1q4el63mij8fp6j9j9oj5nond.apps.googleusercontent.com',
+    webClientId: '841113567422-hlqrrkfe6b20mdsjdffg13bknbvhg3o7.apps.googleusercontent.com',
+    selectAccount: true,
   });
 
   const [___, ____, fbPromptAsync] = Facebook.useAuthRequest({
     clientId: '229503536901618',
     redirectUri: 'https://auth.expo.io/@anzel/khojkhaz',
   });
+
+  useEffect(() => {
+    async function loginUserWithGoogle(access_token: string) {
+      try {
+        setLoading(true);
+
+        const user = await googleLoginOrRegister(access_token);
+        handleSignInUser(user);
+      } catch (error) {
+        handleAuthError();
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    if (googleResponse?.type === 'success') {
+      const { access_token } = googleResponse.params;
+      loginUserWithGoogle(access_token);
+    }
+  }, [googleResponse]);
 
   const { login } = useUser();
   const { goBack } = useNavigation();

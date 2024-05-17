@@ -21,7 +21,8 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.anzel.khojkhaz"
     },
     "android": {
       "package": "com.anzel.khojkhaz",
