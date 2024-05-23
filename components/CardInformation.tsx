@@ -45,15 +45,15 @@ export const CardInformation = ({
   const manageUnitsNavigation = () =>
     navigation.navigate('ManageUnits', { propertyID: property.ID });
 
-  const emailNavigation = () => navigation.navigate('Message', { propertyID: property.ID });
+  const emailNavigation = () => navigation.navigate('MessageProperty', { propertyID: property.ID });
 
   const editPropertyNavigation = () =>
     navigation.navigate('EditProperty', { propertyID: property.ID });
 
   const getLowAndHighText = (type: 'rent' | 'bedroom') => {
     if (type === 'rent') {
-      if (property.rentLow === property.rentHigh) return `$${property.rentLow.toLocaleString()}`;
-      return `$${property.rentLow.toLocaleString()} - ${property.rentHigh.toLocaleString()}`;
+      if (property.rentLow === property.rentHigh) return `Rs${property.rentLow.toLocaleString()}`;
+      return `Rs${property.rentLow.toLocaleString()} - ${property.rentHigh.toLocaleString()}`;
     }
 
     let bedLow = property.bedroomLow === 0 ? 'Studio' : property.bedroomLow;

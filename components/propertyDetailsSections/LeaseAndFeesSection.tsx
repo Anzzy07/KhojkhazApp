@@ -25,10 +25,10 @@ export const LeaseAndFeesSection = ({ property }: { property: Property }) => {
   }
 
   let downDepositBody = [];
-  if (minDeposit === maxDeposit) downDepositBody.push(`$${minDeposit}`);
+  if (minDeposit === maxDeposit) downDepositBody.push(`Rs${minDeposit}`);
   else {
-    downDepositBody.push(`Min: $${minDeposit}`);
-    downDepositBody.push(`Max: $${maxDeposit}`);
+    downDepositBody.push(`Min: Rs${minDeposit}`);
+    downDepositBody.push(`Max: Rs${maxDeposit}`);
   }
 
   const getPetsAllowedText = () => {

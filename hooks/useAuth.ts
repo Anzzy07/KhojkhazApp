@@ -20,6 +20,7 @@ export const useAuth = () => {
     iosClientId: '841113567422-satb5vt4gk1qe5m4tishedcahfs9mfpp.apps.googleusercontent.com',
     androidClientId: '841113567422-d3tl2mh1q4el63mij8fp6j9j9oj5nond.apps.googleusercontent.com',
     webClientId: '841113567422-hlqrrkfe6b20mdsjdffg13bknbvhg3o7.apps.googleusercontent.com',
+    redirectUri: 'https://auth.expo.io/@anzel/khojkhaz',
     selectAccount: true,
   });
 

@@ -1,4 +1,4 @@
-package com.anzel.khojkhaz;
+package com.khojkhaz;
 
 import android.app.Application;
 import android.content.res.Configuration;

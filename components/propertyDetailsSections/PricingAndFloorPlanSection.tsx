@@ -97,7 +97,7 @@ export const PricingAndFloorPlanSection = ({ property }: { property: Property })
                     {i.bedrooms === 0 ? 'Studio ' : i.bedrooms + ' Bed'} {i.bathrooms} Bath
                   </Text>
                   <Text style={styles.apartmentLogisticsMargin} category={'c1'}>
-                    ${i.rent.toLocaleString('en-US')}
+                    Rs{i.rent.toLocaleString('en-US')}
                   </Text>
                   <Text style={styles.apartmentLogisticsMargin} category={'c1'}>
                     {i.bedrooms === 0 ? 'Studio ' : i.bedrooms + ' Bed, '} {i.bathrooms + ' Bath, '}{' '}
@@ -141,7 +141,7 @@ export const PricingAndFloorPlanSection = ({ property }: { property: Property })
                   {i.unit}:
                 </Text>
                 <Text category={'c1'} style={styles.layeredText}>
-                  {i?.rent ? `$${i.rent.toLocaleString('en-US')}` : 'N/A'}
+                  {i?.rent ? `Rs${i.rent.toLocaleString('en-US')}` : 'N/A'}
                 </Text>
                 <Text category={'c1'} style={styles.layeredText}>
                   {i.sqFt.toLocaleString('en-US')}
@@ -155,7 +155,7 @@ export const PricingAndFloorPlanSection = ({ property }: { property: Property })
           ))}
         </>
       ) : (
-        <Text style={styles.apartmentLogisticsTitle}>No Apartments Listed</Text>
+        <Text style={styles.apartmentLogisticsTitle}>No Properties Listed</Text>
       )}
     </>
   );

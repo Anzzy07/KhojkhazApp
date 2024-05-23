@@ -116,8 +116,7 @@ export const MessagePropertyScreen = ({
             showCalendar: yup.bool(),
           })}
           onSubmit={(values) => {
-            // Apartments.com uses a different approach to messaging, hence all the field
-            // names. In our implementation we will only need the messsage from values
+            // In our implementation we will only need the messsage from values
             sendMessage(values.message);
           }}>
           {({

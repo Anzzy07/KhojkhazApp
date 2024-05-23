@@ -1,4 +1,4 @@
-package com.anzel.khojkhaz;
+package com.khojkhaz;
 
 import android.os.Build;
 import android.os.Bundle;
